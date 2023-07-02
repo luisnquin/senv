@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "envs": {
+            "description": "User defined environments.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "The environment name.",
+                        "type": "string"
+                    },
+                    "variables": {
+                        "description": "The variables of the environment.",
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                },
+                "required": ["name", "variables"]
+            }
+        },
+        "defaults": {
+            "description": "Default values that are available in all the environments.",
+            "type": "object",
+            "additionalProperties": true
+        }
+    },
+    "required": ["envs"]
+}
