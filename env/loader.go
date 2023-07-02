@@ -4,7 +4,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/luisnquin/senv/fsutils"
 	"github.com/samber/lo"
@@ -41,7 +40,7 @@ func resolveUsableWorkDirectory(searchDir string, gitFolderFoundOnce bool) strin
 
 		fileName := entry.Name()
 
-		if lo.Contains(configFiles, fileName) || strings.HasSuffix(fileName, ".env") {
+		if lo.Contains(configFiles, fileName) { // || strings.HasSuffix(fileName, ".env") {
 			return searchDir
 		}
 	}
