@@ -20,6 +20,8 @@ type UserPreferences struct {
 	EnvFile string `yaml:"envFile"`
 	// The working directory absolute path.
 	WorkDirectory string `yaml:"-"`
+	// The path of the file associated with the loaded preferences.
+	SourceFilePath string `yaml:"-"`
 }
 
 // Options      map[string][]any `yaml:"options"`
@@ -95,6 +97,8 @@ func LoadUserPreferences() (*UserPreferences, error) {
 			if err := c.validate(); err != nil {
 				return nil, err
 			}
+
+			c.SourceFilePath = configPath
 
 			return c, nil
 		}

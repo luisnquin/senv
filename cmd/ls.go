@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 
 	"github.com/gookit/color"
 	"github.com/luisnquin/senv/env"
@@ -26,15 +27,27 @@ func Ls(currentDir string) error {
 
 	activeEnv := getActiveEnvironment(envFilePath)
 
-	for _, e := range settings.Environments {
-		active := e.Name == activeEnv
+	envNames := make([]string, len(settings.Environments))
 
-		if active {
-			color.HEX("#7de8e8").Printf("(on)  %s\n", e.Name)
-		} else {
-			fmt.Fprintf(os.Stdout, "(off) %s\n", e.Name)
+	for i, e := range settings.Environments {
+		envNames[i] = e.Name
+	}
+
+	sort.Strings(envNames)
+
+	namePrinter := color.New(color.HiGreen, color.OpItalic) // color.HEX("#a4d43f")
+	activePrinter := color.New(color.LightCyan, color.Bold) // color.HEX("#84dde0")
+
+	fmt.Fprintf(os.Stdout, "%s:\n", settings.SourceFilePath)
+
+	for _, name := range envNames {
+		activeLabel := ""
+
+		if name == activeEnv {
+			activeLabel = activePrinter.Sprint("(active)")
 		}
 
+		fmt.Fprintf(os.Stdout, "- %s %s\n", namePrinter.Sprint(name), activeLabel)
 	}
 
 	return nil
