@@ -8,6 +8,10 @@
 $ go install github.com/luisnquin/senv@latest
 ```
 
+## Demo
+
+[![demo](https://asciinema.org/a/sMx03q9XzGINMWh8k0eu5mgZy.svg)](https://asciinema.org/a/sMx03q9XzGINMWh8k0eu5mgZy)
+
 ## Configuration
 
 It requires a `senv.yaml` or `senv.yml` file in your `current directory` or `root working directory`
@@ -19,7 +23,7 @@ If the working root directory is not found or the program files are not found, y
 ### File example
 
 ```yaml
-# .senv.yaml
+# senv.yaml
 envs:
 - name: dev
   variables:
