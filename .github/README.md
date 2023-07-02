@@ -4,7 +4,7 @@
 ## Install
 
 ```bash
-# Requires go >=1.20
+# Requires go >=1.18
 $ go install github.com/luisnquin/senv@latest
 ```
 
