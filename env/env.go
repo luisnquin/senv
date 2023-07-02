@@ -9,8 +9,8 @@ import (
 
 // An user defined environment.
 type Environment struct {
-	Name   string         `yaml:"name"`
-	Values map[string]any `yaml:"values"`
+	Name      string         `yaml:"name"`
+	Variables map[string]any `yaml:"variables"`
 }
 
 //go:embed .env.tpl
@@ -28,9 +28,9 @@ func LoadEnvironments(workDirPath string) ([]Environment, error) {
 
 	for _, e := range config.Environments {
 		for k, v := range config.Defaults {
-			_, ok := e.Values[k]
+			_, ok := e.Variables[k]
 			if !ok {
-				e.Values[k] = v
+				e.Variables[k] = v
 			}
 		}
 	}
@@ -43,7 +43,7 @@ func GenerateDotEnv(e Environment) ([]byte, error) {
 
 	data := map[string]any{
 		"sourceName": e.Name,
-		"values":     e.Values,
+		"variables":     e.Variables,
 	}
 
 	t := template.Must(template.New(".env").Parse(dotEnvTpl))

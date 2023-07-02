@@ -1,4 +1,4 @@
 # source: {{ .sourceName }}
 
-{{ range $key, $value := .values }}{{ $key }}={{ $value }}
+{{ range $key, $value := .variables }}{{ $key }}={{ $value }}
 {{ end }}

@@ -17,22 +17,22 @@ At this moment, it requires an `senv.yaml` or `senv.yml` file in your working di
 ```yaml
 envs:
 - name: dev
-    values:
+    variables:
       DATABASE_USER: admin
       DATABASE_PASSWORD: pwd123
       DATABASE_HOST: localhost
 - name: dev-2
-    values:
+    variables:
       DATABASE_USER: admin
       DATABASE_PASSWORD: pwd321
       DATABASE_HOST: test-host
 - name: prod
-    values:
+    variables:
       DATABASE_USER: admin
       DATABASE_PASSWORD: test-password
       DATABASE_HOST: test-host
 - name: preprod
-    values:
+    variables:
       DATABASE_PASSWORD: root123
       DATABASE_HOST: localhost
 defaults:
