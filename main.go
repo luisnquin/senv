@@ -25,18 +25,18 @@ var (
 
 func main() {
 	check := flaggy.NewSubcommand("check")
-	check.Description = "Checks wether the current working directory has `senv.yaml` or `.env` files"
+	check.Description = "Check if the current working directory has `senv.yaml` or `senv.yml` files"
 	flaggy.AttachSubcommand(check, 1)
 
 	var toSwitchArgument string
 
 	to := flaggy.NewSubcommand("to")
-	to.Description = "Allows you to switch to other environment without a prompt, directly as an argument"
+	to.Description = "Allows you to switch to other environment without a prompt"
 	flaggy.AttachSubcommand(to, 1)
 	to.AddPositionalValue(&toSwitchArgument, "environment", 1, true, "I don't know what this does")
 
 	ls := flaggy.NewSubcommand("ls")
-	ls.Description = "List all the environments in the found working directory."
+	ls.Description = "List all the environments in the working directory"
 	flaggy.AttachSubcommand(ls, 1)
 
 	init := flaggy.NewSubcommand("init")
