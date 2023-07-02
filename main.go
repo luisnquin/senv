@@ -34,9 +34,9 @@ func main() {
 	to.Description = "Allows you to switch to other environment without a prompt, directly as an argument"
 	flaggy.AttachSubcommand(to, 1)
 
-	list := flaggy.NewSubcommand("list")
-	list.Description = "List all the environments in the found working directory."
-	flaggy.AttachSubcommand(list, 1)
+	ls := flaggy.NewSubcommand("ls")
+	ls.Description = "List all the environments in the found working directory."
+	flaggy.AttachSubcommand(ls, 1)
 
 	revert := flaggy.NewSubcommand("revert")
 	revert.Description = "Reverts the last environment switch"
@@ -62,8 +62,8 @@ func main() {
 	switch {
 	case revert.Used:
 		println("revert")
-	case list.Used:
-		println("list")
+	case ls.Used:
+		println("ls")
 	case to.Used:
 		println("to")
 	case check.Used:
