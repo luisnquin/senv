@@ -13,7 +13,7 @@ import (
 // Creates a prompt selector that allows the user to select the environment to switch.
 func Switch(currentDir string) error {
 	if !env.HasUsableWorkDir(currentDir) {
-		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml` or `.env` files")
+		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
 	}
 
 	preferences, err := env.LoadUserPreferences()

@@ -8,6 +8,10 @@ import (
 )
 
 func SwitchTo(currentDir, envToSwitch string) error {
+	if !env.HasUsableWorkDir(currentDir) {
+		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
+	}
+
 	envToSwitch = strings.TrimSpace(envToSwitch)
 
 	settings, err := env.LoadUserPreferences()
