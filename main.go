@@ -57,7 +57,7 @@ func main() {
 	switch {
 	case ls.Used:
 		if err := cmd.Ls(currentDir); err != nil {
-			log.Pretty.Fatal(err.Error())
+			log.Pretty.Error(err.Error())
 		}
 	case to.Used:
 		if err := cmd.SwitchTo(currentDir, toSwitchArgument); err != nil {
