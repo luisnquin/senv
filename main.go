@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/integrii/flaggy"
 	"github.com/luisnquin/senv/cmd"
@@ -45,7 +46,7 @@ func main() {
 
 	flaggy.SetName("senv")
 	flaggy.SetDescription("Switch between .env files")
-	flaggy.SetVersion(fmt.Sprintf("senv %s <%s>", version, commit))
+	flaggy.SetVersion(fmt.Sprintf("senv %s <%s>", version, getCommit()))
 	flaggy.DefaultParser.SetHelpTemplate(helpTpl)
 	flaggy.Parse()
 
@@ -76,6 +77,15 @@ func main() {
 	}
 }
 
+func getCommit() string {
+	info, ok := debug.ReadBuildInfo()
+	if ok {
+		for _, kv := range info.Settings {
+			if kv.Key == "vcs.revision" {
+				return kv.Value
+			}
 		}
 	}
+
+	return commit
 }
