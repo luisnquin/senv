@@ -28,14 +28,16 @@ func main() {
 	check.Description = "Checks wether the current working directory has `senv.yaml` or `.env` files"
 	flaggy.AttachSubcommand(check, 1)
 
+	var toSwitchArgument string
+
 	to := flaggy.NewSubcommand("to")
 	to.Description = "Allows you to switch to other environment without a prompt, directly as an argument"
 	flaggy.AttachSubcommand(to, 1)
+	to.AddPositionalValue(&toSwitchArgument, "environment", 1, true, "I don't know what this does")
 
 	ls := flaggy.NewSubcommand("ls")
 	ls.Description = "List all the environments in the found working directory."
 	flaggy.AttachSubcommand(ls, 1)
-
 
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
@@ -54,9 +56,13 @@ func main() {
 
 	switch {
 	case ls.Used:
-		println("ls")
+		if err := cmd.Ls(currentDir); err != nil {
+			log.Pretty.Fatal(err.Error())
+		}
 	case to.Used:
-		println("to")
+		if err := cmd.SwitchTo(currentDir, toSwitchArgument); err != nil {
+			log.Pretty.Error(err.Error())
+		}
 	case check.Used:
 		if err := cmd.Check(); err != nil {
 			log.Pretty.Fatal(err.Error())

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -37,11 +38,21 @@ func Switch(currentDir string) error {
 		os.Exit(1)
 	}
 
-	environment, ok := lo.Find(environments, func(e env.Environment) bool {
-		return e.Name == selected
+	if err := switchDotEnvFileFromName(workDir, environments, selected); err != nil {
+		return err
+	}
+
+	log.Pretty.Messagef("Switched to '%s'", selected)
+
+	return nil
+}
+
+func switchDotEnvFileFromName(workDir string, envs []env.Environment, envToSwitch string) error {
+	environment, ok := lo.Find(envs, func(e env.Environment) bool {
+		return e.Name == envToSwitch
 	})
 	if !ok {
-		log.Pretty.Fatal("lol")
+		return errors.New("environment not found")
 	}
 
 	dotEnv, err := env.GenerateDotEnv(environment)
@@ -52,8 +63,6 @@ func Switch(currentDir string) error {
 	if err := os.WriteFile(filepath.Join(workDir, ".env"), dotEnv, os.ModePerm); err != nil {
 		return err
 	}
-
-	log.Pretty.Messagef("Switched to '%s'", environment.Name)
 
 	return nil
 }
