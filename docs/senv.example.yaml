@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/luisnquin/senv/main/docs/senv.schema.json
+
+envs:
+  - name: dev
+    variables:
+      HOST: localhost
+defaults:
+  PORT: 8080

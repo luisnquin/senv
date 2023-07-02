@@ -21,12 +21,18 @@ var (
 
 	//go:embed help.tpl
 	helpTpl string
+	//go:embed docs/senv.example.yaml
+	genericConfigFile []byte
 )
 
 func main() {
 	check := flaggy.NewSubcommand("check")
 	check.Description = "Checks wether the current working directory has `senv.yaml` or `.env` files"
 	flaggy.AttachSubcommand(check, 1)
+
+	to := flaggy.NewSubcommand("to")
+	to.Description = "Allows you to switch to other environment without a prompt, directly as an argument"
+	flaggy.AttachSubcommand(to, 1)
 
 	list := flaggy.NewSubcommand("list")
 	list.Description = "List all the environments in the found working directory."
@@ -36,9 +42,9 @@ func main() {
 	revert.Description = "Reverts the last environment switch"
 	flaggy.AttachSubcommand(revert, 1)
 
-	to := flaggy.NewSubcommand("to")
-	to.Description = "Allows you to switch to other environment without a prompt, directly as an argument"
-	flaggy.AttachSubcommand(to, 1)
+	init := flaggy.NewSubcommand("init")
+	init.Description = "Creates a new configuration file in the current directory"
+	flaggy.AttachSubcommand(init, 1)
 
 	flaggy.SetName("senv")
 	flaggy.SetDescription("Switch between .env files")
@@ -66,6 +72,18 @@ func main() {
 		} else {
 			println("doesn't have YAML or env files")
 			os.Exit(1)
+		}
+	case init.Used:
+		const configFilePath = "./senv.yaml"
+
+		_, err := os.Stat(configFilePath)
+		if err == nil {
+			log.Pretty.Error("configuration file already exists in current directory")
+		}
+
+		err = os.WriteFile(configFilePath, genericConfigFile, os.ModePerm)
+		if err != nil {
+			log.Pretty.Fatal(err.Error())
 		}
 	default:
 		if !hasEnvOrEnvFiles {
