@@ -5,20 +5,34 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/luisnquin/senv/fsutils"
 	"gopkg.in/yaml.v3"
 )
 
 var configFiles = []string{"senv.yaml", "senv.yml"}
 
-type SenvConfig struct {
+// The user preferences.
+type UserPreferences struct {
 	// User defined environments.
-	Environments []Environment  `yaml:"envs"`
-	Defaults     map[string]any `yaml:"defaults"`
-	// Options      map[string][]any `yaml:"options"`
+	Environments []Environment `yaml:"envs"`
+	// Default variables for all the environments.
+	Defaults map[string]any `yaml:"defaults"`
+	// The relative or absolute path to the env file.
+	EnvFile string `yaml:"envFile"`
+	// The working directory absolute path.
+	WorkDirectory string `yaml:"-"`
 }
 
-func (c SenvConfig) validate() error {
+// Options      map[string][]any `yaml:"options"`
+
+func (c UserPreferences) GetEnvFilePath() (string, error) {
+	if filepath.IsAbs(c.EnvFile) {
+		return c.EnvFile, nil
+	}
+
+	return filepath.Join(c.WorkDirectory, c.EnvFile), nil
+}
+
+func (c *UserPreferences) validate() error {
 	namesRegister := make(map[string]struct{}, len(c.Environments))
 
 	for _, e := range c.Environments {
@@ -26,20 +40,39 @@ func (c SenvConfig) validate() error {
 			return fmt.Errorf("environment name %q already registered", e.Name)
 		}
 
+		for k, v := range c.Defaults {
+			_, ok := e.Variables[k]
+			if !ok {
+				e.Variables[k] = v
+			}
+		}
+
 		namesRegister[e.Name] = struct{}{}
+	}
+
+	if c.EnvFile == "" {
+		c.EnvFile = "./.env"
+	}
+
+	info, err := os.Stat(c.EnvFile)
+	if err == nil && info.IsDir() {
+		return fmt.Errorf("specified env file is a folder: %s", c.EnvFile)
 	}
 
 	return nil
 }
 
-func loadConfig(workDirPath string) (*SenvConfig, error) {
-	c := new(SenvConfig)
-
-	if !fsutils.DirExists(workDirPath) {
-		return nil, fmt.Errorf("provided work dir path does not exist")
+func LoadUserPreferences() (*UserPreferences, error) {
+	currentPath, err := os.Getwd()
+	if err != nil {
+		return nil, err
 	}
 
-	workDirPath = filepath.Clean(workDirPath)
+	workDirPath := resolveUsableWorkDirectory(currentPath, false)
+
+	c := &UserPreferences{
+		WorkDirectory: workDirPath,
+	}
 
 	for _, fileName := range configFiles {
 		configPath := filepath.Join(workDirPath, fileName)

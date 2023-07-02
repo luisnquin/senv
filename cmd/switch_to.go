@@ -10,17 +10,12 @@ import (
 func SwitchTo(currentDir, envToSwitch string) error {
 	envToSwitch = strings.TrimSpace(envToSwitch)
 
-	workDir, err := env.ResolveUsableWorkDir(currentDir)
+	settings, err := env.LoadUserPreferences()
 	if err != nil {
 		return err
 	}
 
-	environments, err := env.LoadEnvironments(workDir)
-	if err != nil {
-		return err
-	}
-
-	if err := switchDotEnvFileFromName(workDir, environments, envToSwitch); err != nil {
+	if err := switchDotEnvFileFromName(settings, envToSwitch); err != nil {
 		return err
 	}
 

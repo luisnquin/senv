@@ -24,6 +24,7 @@ If the working root directory is not found or the program files are not found, y
 
 ```yaml
 # senv.yaml
+envFile: ./app/.env # optional absolute/relative path
 envs:
 - name: dev
   variables:

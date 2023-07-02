@@ -21,6 +21,11 @@
                 "required": ["name", "variables"]
             }
         },
+        "envFile": {
+            "description": "The absolute or relative path to the final .env file",
+            "type": "string",
+            "default": "./.env"
+        },
         "defaults": {
             "description": "Default values that are available in all the environments.",
             "type": "object",

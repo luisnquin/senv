@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path/filepath"
 	"regexp"
 
 	"github.com/gookit/color"
@@ -15,19 +14,19 @@ import (
 var rxSenvDotEnvComment = regexp.MustCompile("[\\#\\_]+")
 
 func Ls(currentDir string) error {
-	workDir, err := env.ResolveUsableWorkDir(currentDir)
+	settings, err := env.LoadUserPreferences()
 	if err != nil {
 		return err
 	}
 
-	environments, err := env.LoadEnvironments(workDir)
+	envFilePath, err := settings.GetEnvFilePath()
 	if err != nil {
 		return err
 	}
 
-	activeEnv := getActiveEnvironment(workDir)
+	activeEnv := getActiveEnvironment(envFilePath)
 
-	for _, e := range environments {
+	for _, e := range settings.Environments {
 		active := e.Name == activeEnv
 
 		if active {
@@ -42,8 +41,8 @@ func Ls(currentDir string) error {
 }
 
 // Returns an empty string if not found.
-func getActiveEnvironment(workDir string) string {
-	data, err := os.ReadFile(filepath.Join(workDir, ".env"))
+func getActiveEnvironment(envFilePath string) string {
+	data, err := os.ReadFile(envFilePath)
 	if err != nil {
 		return ""
 	}

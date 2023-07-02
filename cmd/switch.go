@@ -3,7 +3,6 @@ package cmd
 import (
 	"errors"
 	"os"
-	"path/filepath"
 
 	"github.com/luisnquin/senv/env"
 	"github.com/luisnquin/senv/log"
@@ -17,19 +16,14 @@ func Switch(currentDir string) error {
 		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml` or `.env` files")
 	}
 
-	workDir, err := env.ResolveUsableWorkDir(currentDir)
+	preferences, err := env.LoadUserPreferences()
 	if err != nil {
 		return err
 	}
 
-	environments, err := env.LoadEnvironments(workDir)
-	if err != nil {
-		return err
-	}
+	envNames := make([]string, len(preferences.Environments))
 
-	envNames := make([]string, len(environments))
-
-	for i, env := range environments {
+	for i, env := range preferences.Environments {
 		envNames[i] = env.Name
 	}
 
@@ -38,7 +32,7 @@ func Switch(currentDir string) error {
 		os.Exit(1)
 	}
 
-	if err := switchDotEnvFileFromName(workDir, environments, selected); err != nil {
+	if err := switchDotEnvFileFromName(preferences, selected); err != nil {
 		return err
 	}
 
@@ -47,20 +41,25 @@ func Switch(currentDir string) error {
 	return nil
 }
 
-func switchDotEnvFileFromName(workDir string, envs []env.Environment, envToSwitch string) error {
-	environment, ok := lo.Find(envs, func(e env.Environment) bool {
+func switchDotEnvFileFromName(preferences *env.UserPreferences, envToSwitch string) error {
+	environment, ok := lo.Find(preferences.Environments, func(e env.Environment) bool {
 		return e.Name == envToSwitch
 	})
 	if !ok {
 		return errors.New("environment not found")
 	}
 
-	dotEnv, err := env.GenerateDotEnv(environment)
+	dotEnvData, err := env.GenerateDotEnv(environment)
 	if err != nil {
 		return err
 	}
 
-	if err := os.WriteFile(filepath.Join(workDir, ".env"), dotEnv, os.ModePerm); err != nil {
+	envFilePath, err := preferences.GetEnvFilePath()
+	if err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(envFilePath, dotEnvData, os.ModePerm); err != nil {
 		return err
 	}
 

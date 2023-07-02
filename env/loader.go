@@ -18,7 +18,7 @@ func HasUsableWorkDir(fromDir string) bool {
 	return path != ""
 }
 
-func ResolveUsableWorkDir(fromDir string) (string, error) {
+func resolveUsableWorkDir(fromDir string) (string, error) {
 	path := resolveUsableWorkDirectory(fromDir, false)
 	if path == "" {
 		return "", errors.New("work dir cannot be resolved")
