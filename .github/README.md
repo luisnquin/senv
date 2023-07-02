@@ -51,6 +51,7 @@ defaults:
 - Unit && E2E tests
 - Config to enable "export " prefix
 - Support multiple *.env files as providers
+- Completions for 'to' subcommand
 
 ## LICENSE
 
