@@ -4,13 +4,10 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/integrii/flaggy"
-	"github.com/luisnquin/senv/env"
+	"github.com/luisnquin/senv/cmd"
 	"github.com/luisnquin/senv/log"
-	"github.com/luisnquin/senv/prompt"
-	"github.com/samber/lo"
 )
 
 const DEFAULT_VERSION = "unversioned"
@@ -57,8 +54,6 @@ func main() {
 		panic(err)
 	}
 
-	hasEnvOrEnvFiles := env.HasUsableWorkDir(currentDir)
-
 	switch {
 	case revert.Used:
 		println("revert")
@@ -67,66 +62,20 @@ func main() {
 	case to.Used:
 		println("to")
 	case check.Used:
-		if hasEnvOrEnvFiles {
-			println("has YAML or env files")
-		} else {
-			println("doesn't have YAML or env files")
-			os.Exit(1)
+		if err := cmd.Check(); err != nil {
+			log.Pretty.Fatal(err.Error())
 		}
 	case init.Used:
-		const configFilePath = "./senv.yaml"
-
-		_, err := os.Stat(configFilePath)
-		if err == nil {
-			log.Pretty.Error("configuration file already exists in current directory")
-		}
-
-		err = os.WriteFile(configFilePath, genericConfigFile, os.ModePerm)
-		if err != nil {
-			log.Pretty.Fatal(err.Error())
+		if err := cmd.Init(genericConfigFile); err != nil {
+			log.Pretty.Error(err.Error())
 		}
 	default:
-		if !hasEnvOrEnvFiles {
-			log.Pretty.Error1("Current working folder doesn't have a `senv.yaml` or `.env` files")
-		}
-
-		workDir, err := env.ResolveUsableWorkDir(currentDir)
-		if err != nil {
-			log.Pretty.Fatal(err.Error())
-		}
-
-		environments, err := env.LoadEnvironments(workDir)
-		if err != nil {
-			log.Pretty.Fatal(err.Error())
-		}
-
-		envNames := make([]string, len(environments))
-
-		for i, env := range environments {
-			envNames[i] = env.Name
-		}
-
-		selected, ok := prompt.ListSelector("Select an environment", envNames)
-		if !ok {
-			os.Exit(1)
-		}
-
-		environment, ok := lo.Find(environments, func(e env.Environment) bool {
-			return e.Name == selected
-		})
-		if !ok {
-			log.Pretty.Fatal("lol")
-		}
-
-		dotEnv, err := env.GenerateDotEnv(environment)
-		if err != nil {
+		if err := cmd.Switch(currentDir); err != nil {
 			log.Pretty.Error(err.Error())
 		}
+	}
+}
 
-		if err := os.WriteFile(filepath.Join(workDir, ".env"), dotEnv, os.ModePerm); err != nil {
-			log.Pretty.Error(err.Error())
 		}
-
-		log.Pretty.Messagef("Switched to '%s'", environment.Name)
 	}
 }
