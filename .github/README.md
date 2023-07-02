@@ -45,6 +45,13 @@ defaults:
   DATABASE_PORT: 5432 # selected environment if not declared
 ```
 
+## TODO
+
+- CI
+- Unit && E2E tests
+- Config to enable "export " prefix
+- Support multiple *.env files as providers
+
 ## LICENSE
 
 [MIT](../LICENSE)
