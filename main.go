@@ -36,9 +36,6 @@ func main() {
 	ls.Description = "List all the environments in the found working directory."
 	flaggy.AttachSubcommand(ls, 1)
 
-	revert := flaggy.NewSubcommand("revert")
-	revert.Description = "Reverts the last environment switch"
-	flaggy.AttachSubcommand(revert, 1)
 
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
@@ -56,8 +53,6 @@ func main() {
 	}
 
 	switch {
-	case revert.Used:
-		println("revert")
 	case ls.Used:
 		println("ls")
 	case to.Used:
