@@ -109,6 +109,6 @@ func main() {
 			log.Pretty.Error(err.Error())
 		}
 
-		log.Pretty.Message(".env file updated")
+		log.Pretty.Messagef("Switched to '%s'", environment.Name)
 	}
 }

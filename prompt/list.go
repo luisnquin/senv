@@ -15,6 +15,7 @@ func ListSelector(label string, options []string) (string, bool) {
 		StartInSearchMode: true,
 		HideHelp:          true,
 		Size:              10,
+		HideSelected:      true,
 	}
 
 	_, selected, err := s.Run()

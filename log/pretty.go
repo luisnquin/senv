@@ -15,6 +15,10 @@ func (p prettyPrinter) Message(s string) {
 	fmt.Fprintf(os.Stdout, color.HEX("#74a7f2").Sprintf("%s\n", s))
 }
 
+func (p prettyPrinter) Messagef(template string, more ...any) {
+	p.Message(fmt.Sprintf(template, more...))
+}
+
 func (p prettyPrinter) Error(message string) {
 	fmt.Fprint(os.Stderr, color.HEX("#e63758").Sprintf("Error: %s\n", message))
 }
