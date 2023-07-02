@@ -1,0 +1,8 @@
+{
+    "cSpell.words": ["fsutils"],
+    "material-icon-theme.folders.associations": {
+        "fsutils": "Context",
+        "ui": "Layout",
+        "prompt": "Middleware"
+    }
+}
