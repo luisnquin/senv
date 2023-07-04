@@ -1,1 +1,4 @@
 build/
+senv.yaml
+sketch.txt
+.env
