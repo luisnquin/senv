@@ -9,7 +9,7 @@ import (
 	"sort"
 
 	"github.com/gookit/color"
-	"github.com/luisnquin/senv/env"
+	"github.com/luisnquin/senv/internal/env"
 )
 
 var rxSenvDotEnvComment = regexp.MustCompile("[\\#\\_]+")

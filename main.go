@@ -8,7 +8,7 @@ import (
 
 	"github.com/integrii/flaggy"
 	"github.com/luisnquin/senv/cmd"
-	"github.com/luisnquin/senv/log"
+	"github.com/luisnquin/senv/internal/log"
 )
 
 const DEFAULT_VERSION = "unversioned"

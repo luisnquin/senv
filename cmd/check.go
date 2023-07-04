@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/luisnquin/senv/env"
+	"github.com/luisnquin/senv/internal/env"
 )
 
 func Check() error {

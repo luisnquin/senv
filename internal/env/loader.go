@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/luisnquin/senv/fsutils"
+	"github.com/luisnquin/senv/internal/fsutils"
 	"github.com/samber/lo"
 )
 

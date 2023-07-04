@@ -3,8 +3,8 @@ package cmd
 import (
 	"strings"
 
-	"github.com/luisnquin/senv/env"
-	"github.com/luisnquin/senv/log"
+	"github.com/luisnquin/senv/internal/env"
+	"github.com/luisnquin/senv/internal/log"
 )
 
 func SwitchTo(currentDir, envToSwitch string) error {

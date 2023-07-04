@@ -4,9 +4,9 @@ import (
 	"errors"
 	"os"
 
-	"github.com/luisnquin/senv/env"
-	"github.com/luisnquin/senv/log"
-	"github.com/luisnquin/senv/prompt"
+	"github.com/luisnquin/senv/internal/env"
+	"github.com/luisnquin/senv/internal/log"
+	"github.com/luisnquin/senv/internal/prompt"
 	"github.com/samber/lo"
 )
 
