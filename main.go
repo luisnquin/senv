@@ -7,7 +7,7 @@ import (
 	"runtime/debug"
 
 	"github.com/integrii/flaggy"
-	"github.com/luisnquin/senv/cmd"
+	"github.com/luisnquin/senv/internal/cmd"
 	"github.com/luisnquin/senv/internal/log"
 )
 
