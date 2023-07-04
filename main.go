@@ -54,7 +54,7 @@ func main() {
 	completion.AddPositionalValue(&completionShellArg, "shell", 1, true, "Supported shells: zsh && bash")
 
 	flaggy.SetName("senv")
-	flaggy.SetDescription("Switch between .env files")
+	flaggy.SetDescription("Switch your .env file")
 	flaggy.SetVersion(fmt.Sprintf("senv %s <%s>", version, getCommit()))
 	flaggy.DefaultParser.SetHelpTemplate(helpTpl)
 	flaggy.Parse()
