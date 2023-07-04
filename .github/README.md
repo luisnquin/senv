@@ -48,6 +48,7 @@ envs:
 defaults:
   DATABASE_USER: admin # both variables will be added to the
   DATABASE_PORT: 5432 # selected environment if not declared
+useExportPrefix: false # optional
 ```
 
 ## Completions
@@ -74,7 +75,6 @@ Completions are very simple.
 
 - CI
 - Unit && E2E tests
-- Config to enable "export " prefix
 - Support multiple *.env files as providers
 - Completions for 'to' subcommand
 

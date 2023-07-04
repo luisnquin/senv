@@ -1,4 +1,4 @@
 #_{{ .sourceName }}_#
 
-{{ range $key, $value := .variables }}{{ $key }}={{ $value }}
+{{ range $key, $value := .variables }}{{if $.useExport}}export {{end}}{{ $key }}={{ $value }}
 {{ end }}

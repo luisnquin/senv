@@ -22,7 +22,7 @@
             }
         },
         "envFile": {
-            "description": "The absolute or relative path to the final .env file",
+            "description": "The absolute or relative path to the final .env file.",
             "type": "string",
             "default": "./.env"
         },
@@ -30,6 +30,10 @@
             "description": "Default values that are available in all the environments.",
             "type": "object",
             "additionalProperties": true
+        },
+        "useExportPrefix": {
+            "description": "If true, export will be in each variable declaration of the generated .env file.",
+            "type": "boolean"
         }
     },
     "required": ["envs"]

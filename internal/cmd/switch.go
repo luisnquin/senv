@@ -16,14 +16,14 @@ func Switch(currentDir string) error {
 		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
 	}
 
-	preferences, err := env.LoadUserPreferences()
+	settings, err := env.LoadUserPreferences()
 	if err != nil {
 		return err
 	}
 
-	envNames := make([]string, len(preferences.Environments))
+	envNames := make([]string, len(settings.Environments))
 
-	for i, env := range preferences.Environments {
+	for i, env := range settings.Environments {
 		envNames[i] = env.Name
 	}
 
@@ -32,7 +32,7 @@ func Switch(currentDir string) error {
 		os.Exit(1)
 	}
 
-	if err := switchDotEnvFileFromName(preferences, selected); err != nil {
+	if err := switchDotEnvFileFromName(settings, selected, settings.UseExportPrefix); err != nil {
 		return err
 	}
 
@@ -41,7 +41,7 @@ func Switch(currentDir string) error {
 	return nil
 }
 
-func switchDotEnvFileFromName(preferences *env.UserPreferences, envToSwitch string) error {
+func switchDotEnvFileFromName(preferences *env.UserPreferences, envToSwitch string, useExportPrefix bool) error {
 	environment, ok := lo.Find(preferences.Environments, func(e env.Environment) bool {
 		return e.Name == envToSwitch
 	})
@@ -49,7 +49,7 @@ func switchDotEnvFileFromName(preferences *env.UserPreferences, envToSwitch stri
 		return errors.New("environment not found")
 	}
 
-	dotEnvData, err := env.GenerateDotEnv(environment)
+	dotEnvData, err := env.GenerateDotEnv(environment, useExportPrefix)
 	if err != nil {
 		return err
 	}

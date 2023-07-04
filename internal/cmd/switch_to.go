@@ -19,7 +19,7 @@ func SwitchTo(currentDir, envToSwitch string) error {
 		return err
 	}
 
-	if err := switchDotEnvFileFromName(settings, envToSwitch); err != nil {
+	if err := switchDotEnvFileFromName(settings, envToSwitch, settings.UseExportPrefix); err != nil {
 		return err
 	}
 

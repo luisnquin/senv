@@ -17,6 +17,8 @@ type UserPreferences struct {
 	Defaults map[string]any `yaml:"defaults"`
 	// The relative or absolute path to the env file.
 	EnvFile string `yaml:"envFile"`
+	// Indicates whether to use the 'export' prefix in the final .env file or not.
+	UseExportPrefix bool `yaml:"useExportPrefix"`
 	// The working directory absolute path.
 	WorkDirectory string `yaml:"-"`
 	// The path of the file associated with the loaded preferences.

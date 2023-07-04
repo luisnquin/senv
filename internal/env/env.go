@@ -15,12 +15,13 @@ type Environment struct {
 //go:embed .env.tpl
 var dotEnvTpl string
 
-func GenerateDotEnv(e Environment) ([]byte, error) {
+func GenerateDotEnv(e Environment, useExportPrefix bool) ([]byte, error) {
 	var b bytes.Buffer
 
 	data := map[string]any{
 		"sourceName": e.Name,
 		"variables":  e.Variables,
+		"useExport":  useExportPrefix,
 	}
 
 	t := template.Must(template.New(".env").Parse(dotEnvTpl))
