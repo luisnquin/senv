@@ -1,14 +1,13 @@
 package env
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 )
-
-var configFiles = []string{"senv.yaml", "senv.yml"}
 
 // The user preferences.
 type UserPreferences struct {
@@ -23,6 +22,10 @@ type UserPreferences struct {
 	// The path of the file associated with the loaded preferences.
 	SourceFilePath string `yaml:"-"`
 }
+
+var configFiles = []string{"senv.yaml", "senv.yml"}
+
+var ErrConfigNotFound = errors.New("configuration file not found")
 
 // Options      map[string][]any `yaml:"options"`
 
@@ -104,5 +107,5 @@ func LoadUserPreferences() (*UserPreferences, error) {
 		}
 	}
 
-	return nil, nil
+	return nil, ErrConfigNotFound
 }
