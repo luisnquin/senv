@@ -50,6 +50,26 @@ defaults:
   DATABASE_PORT: 5432 # selected environment if not declared
 ```
 
+## Completions
+
+Completions are very simple.
+
+### Supported shells
+
+- zsh
+
+```bash
+ # Add this line to your .zshrc file
+ $ source <(senv completion zsh)
+```
+
+- bash
+
+```bash
+ # Add this line to your .bashrc file
+  $ source <(senv completion bash)
+```
+
 ## TODO
 
 - CI
