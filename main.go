@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	_ "embed"
 	"fmt"
 	"os"
@@ -21,6 +22,8 @@ var (
 	helpTpl string
 	//go:embed docs/senv.example.yaml
 	genericConfigFile []byte
+	//go:embed completions
+	completionsFolder embed.FS
 )
 
 func main() {
@@ -28,12 +31,12 @@ func main() {
 	check.Description = "Check if the current working directory has `senv.yaml` or `senv.yml` files"
 	flaggy.AttachSubcommand(check, 1)
 
-	var toSwitchArgument string
+	var toSwitchArg string
 
 	to := flaggy.NewSubcommand("to")
 	to.Description = "Allows you to switch to other environment without a prompt"
 	flaggy.AttachSubcommand(to, 1)
-	to.AddPositionalValue(&toSwitchArgument, "environment", 1, true, "I don't know what this does")
+	to.AddPositionalValue(&toSwitchArg, "environment", 1, true, "I don't know what this does")
 
 	ls := flaggy.NewSubcommand("ls")
 	ls.Description = "List all the environments in the working directory"
@@ -42,6 +45,13 @@ func main() {
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
 	flaggy.AttachSubcommand(init, 1)
+
+	var completionShellArg string
+
+	completion := flaggy.NewSubcommand("completion")
+	completion.Hidden = true
+	flaggy.AttachSubcommand(completion, 1)
+	completion.AddPositionalValue(&completionShellArg, "shell", 1, true, "Supported shells: zsh && bash")
 
 	flaggy.SetName("senv")
 	flaggy.SetDescription("Switch between .env files")
@@ -55,12 +65,16 @@ func main() {
 	}
 
 	switch {
+	case completion.Used:
+		if err := cmd.Completion(completionsFolder, completionShellArg); err != nil {
+			log.Pretty.Error(err.Error())
+		}
 	case ls.Used:
 		if err := cmd.Ls(currentDir); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	case to.Used:
-		if err := cmd.SwitchTo(currentDir, toSwitchArgument); err != nil {
+		if err := cmd.SwitchTo(currentDir, toSwitchArg); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	case check.Used:
