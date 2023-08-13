@@ -1,4 +1,4 @@
-package env
+package core
 
 import (
 	"errors"
@@ -25,11 +25,56 @@ type UserPreferences struct {
 	SourceFilePath string `yaml:"-"`
 }
 
-var configFiles = []string{"senv.yaml", "senv.yml"}
+// An user defined environment.
+type Environment struct {
+	Name      string         `yaml:"name"`
+	Variables map[string]any `yaml:"variables"`
+}
 
-var ErrConfigNotFound = errors.New("configuration file not found")
+var ErrConfigNotFound = errors.New("senv.yaml file not found")
 
-// Options      map[string][]any `yaml:"options"`
+func LoadUserPreferences() (*UserPreferences, error) {
+	currentPath, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
+	workDirPath := workDirHasProgramFiles(currentPath, false)
+
+	c := &UserPreferences{
+		WorkDirectory: workDirPath,
+	}
+
+	for _, fileName := range configFiles {
+		configPath := filepath.Join(workDirPath, fileName)
+
+		info, err := os.Stat(configPath)
+		if err != nil {
+			continue
+		}
+
+		if !info.IsDir() {
+			data, err := os.ReadFile(configPath)
+			if err != nil {
+				return nil, err
+			}
+
+			if err := yaml.Unmarshal(data, c); err != nil {
+				return nil, err
+			}
+
+			if err := c.validate(); err != nil {
+				return nil, err
+			}
+
+			c.SourceFilePath = configPath
+
+			return c, nil
+		}
+	}
+
+	return nil, ErrConfigNotFound
+}
 
 func (c UserPreferences) GetEnvFilePath() (string, error) {
 	if filepath.IsAbs(c.EnvFile) {
@@ -67,47 +112,4 @@ func (c *UserPreferences) validate() error {
 	}
 
 	return nil
-}
-
-func LoadUserPreferences() (*UserPreferences, error) {
-	currentPath, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	workDirPath := resolveUsableWorkDirectory(currentPath, false)
-
-	c := &UserPreferences{
-		WorkDirectory: workDirPath,
-	}
-
-	for _, fileName := range configFiles {
-		configPath := filepath.Join(workDirPath, fileName)
-
-		info, err := os.Stat(configPath)
-		if err != nil {
-			continue
-		}
-
-		if !info.IsDir() {
-			data, err := os.ReadFile(configPath)
-			if err != nil {
-				return nil, err
-			}
-
-			if err := yaml.Unmarshal(data, c); err != nil {
-				return nil, err
-			}
-
-			if err := c.validate(); err != nil {
-				return nil, err
-			}
-
-			c.SourceFilePath = configPath
-
-			return c, nil
-		}
-	}
-
-	return nil, ErrConfigNotFound
 }

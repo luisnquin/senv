@@ -4,7 +4,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/luisnquin/senv/internal/env"
+	"github.com/luisnquin/senv/internal/core"
 	"github.com/luisnquin/senv/internal/log"
 	"github.com/luisnquin/senv/internal/prompt"
 	"github.com/samber/lo"
@@ -12,11 +12,11 @@ import (
 
 // Creates a prompt selector that allows the user to select the environment to switch.
 func Switch(currentDir string) error {
-	if !env.HasUsableWorkDir(currentDir) {
+	if !core.WorkDirHasProgramFiles(currentDir) {
 		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
 	}
 
-	settings, err := env.LoadUserPreferences()
+	settings, err := core.LoadUserPreferences()
 	if err != nil {
 		return err
 	}
@@ -41,15 +41,15 @@ func Switch(currentDir string) error {
 	return nil
 }
 
-func switchDotEnvFileFromName(preferences *env.UserPreferences, envToSwitch string, useExportPrefix bool) error {
-	environment, ok := lo.Find(preferences.Environments, func(e env.Environment) bool {
+func switchDotEnvFileFromName(preferences *core.UserPreferences, envToSwitch string, useExportPrefix bool) error {
+	environment, ok := lo.Find(preferences.Environments, func(e core.Environment) bool {
 		return e.Name == envToSwitch
 	})
 	if !ok {
 		return errors.New("environment not found")
 	}
 
-	dotEnvData, err := env.GenerateDotEnv(environment, useExportPrefix)
+	dotEnvData, err := core.GenerateDotEnv(environment, useExportPrefix)
 	if err != nil {
 		return err
 	}

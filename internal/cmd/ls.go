@@ -9,13 +9,13 @@ import (
 	"sort"
 
 	"github.com/gookit/color"
-	"github.com/luisnquin/senv/internal/env"
+	"github.com/luisnquin/senv/internal/core"
 )
 
 var rxSenvDotEnvComment = regexp.MustCompile("[\\#\\_]+")
 
 func Ls(currentDir string) error {
-	settings, err := env.LoadUserPreferences()
+	settings, err := core.LoadUserPreferences()
 	if err != nil {
 		return err
 	}

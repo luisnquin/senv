@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/luisnquin/senv/internal/env"
+	"github.com/luisnquin/senv/internal/core"
 )
 
 func Check() error {
@@ -12,7 +12,7 @@ func Check() error {
 		return err
 	}
 
-	if !env.HasUsableWorkDir(currentDir) {
+	if !core.WorkDirHasProgramFiles(currentDir) {
 		os.Exit(1)
 	}
 
