@@ -3,20 +3,18 @@ package main
 import (
 	"embed"
 	_ "embed"
-	"fmt"
 	"os"
 	"runtime/debug"
 
 	"github.com/integrii/flaggy"
+	"github.com/luisnquin/senv/internal"
 	"github.com/luisnquin/senv/internal/assets"
 	"github.com/luisnquin/senv/internal/cmd"
 	"github.com/luisnquin/senv/internal/log"
 )
 
-const DEFAULT_VERSION = "unversioned"
-
 var (
-	version = DEFAULT_VERSION
+	version = internal.DEFAULT_VERSION
 	commit  string
 
 	//go:embed docs/senv.example.yaml
@@ -57,7 +55,7 @@ func main() {
 	flaggy.DefaultParser.ShowVersionWithVersionFlag = false // Thanks but ugly
 	flaggy.Bool(&versionFlag, "v", "version", "Displays the program version.")
 
-	flaggy.SetName("senv")
+	flaggy.SetName(internal.PROGRAM_NAME)
 	flaggy.SetDescription("Switch your .env file")
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
@@ -69,7 +67,9 @@ func main() {
 
 	switch {
 	case versionFlag:
-		fmt.Fprintf(os.Stdout, "senv %s <%s>\n", version, getCommit())
+		if err := cmd.Version(version, commit); err != nil {
+			log.Pretty.Fatal(err.Error())
+		}
 	case completion.Used:
 		if err := cmd.Completion(completionsFolder, completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
