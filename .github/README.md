@@ -1,6 +1,17 @@
 
 # Senv
 
+## Why?
+
+It's annoying to have to manually update each **environment variable** or rename **.env** files in order to change to specific configurations for a project.
+The problem is multiplied if you are working on more than a single project at the same time so the idea here is to have a **senv.yaml** in each one of your
+projects when you think that you're dealing with multiple **.env** settings.
+
+You can call the program in any subdirectory of your project and the program will automatically find the **senv.yaml**.
+
+It's highly inspired by [VSCode - .ENV Switcher](https://marketplace.visualstudio.com/items?itemName=EcksDy.env-switcher) but only deals with a single
+configuration file and can be called directly from the command line.
+
 ## Install
 
 ```bash
