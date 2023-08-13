@@ -3,7 +3,7 @@ module github.com/luisnquin/senv
 go 1.18
 
 require (
-	github.com/gookit/color v1.5.3
+	github.com/gookit/color v1.5.4
 	github.com/integrii/flaggy v1.5.2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/samber/lo v1.38.1
@@ -13,6 +13,6 @@ require (
 require (
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/exp v0.0.0-20230626212559-97b1e661b5df // indirect
-	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb // indirect
+	golang.org/x/sys v0.11.0 // indirect
 )
