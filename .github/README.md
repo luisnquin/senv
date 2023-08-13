@@ -10,7 +10,7 @@ $ go install github.com/luisnquin/senv@latest
 
 ## Demo
 
-[![demo](https://asciinema.org/a/sMx03q9XzGINMWh8k0eu5mgZy.svg)](https://asciinema.org/a/sMx03q9XzGINMWh8k0eu5mgZy)
+[![demo](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8.svg)](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8)
 
 ## Configuration
 
