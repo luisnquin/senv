@@ -23,15 +23,14 @@ $ go install github.com/luisnquin/senv@latest
 
 [![demo](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8.svg)](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8)
 
-## Configuration
+## Settings file
 
-It requires a `senv.yaml` or `senv.yml` file in your `current directory` or `root working directory`
-(you can call the program in any subdirectory of the project but for that it requires a git repository
-already initialized).
+The program requires a **senv.yaml** or **senv.yml** file. You can call the program in any subdirectory
+of the project but for that it requires that the **settings file** is at the same level of your **.git folder**.
 
-If the working root directory is not found or the program files are not found, you'll not be able to switch.
+### Example
 
-### File example
+Suppose we have a **senv.yaml** file like this:
 
 ```yaml
 # senv.yaml
@@ -62,9 +61,18 @@ defaults:
 useExportPrefix: false # optional
 ```
 
-## Completions
+When the .env file is generated from **preprod** it will look like this:
 
-Completions are very simple.
+```bash
+#_preprod_#
+
+DATABASE_PASSWORD="root123"
+DATABASE_HOST="localhost"
+DATABASE_USER="admin"
+DATABASE_PORT="5432"
+```
+
+## Completions
 
 ### Supported shells
 
