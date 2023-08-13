@@ -52,9 +52,13 @@ func main() {
 	flaggy.AttachSubcommand(completion, 1)
 	completion.AddPositionalValue(&completionShellArg, "shell", 1, true, "Supported shells: zsh && bash")
 
+	var versionFlag bool
+
+	flaggy.DefaultParser.ShowVersionWithVersionFlag = false // Thanks but ugly
+	flaggy.Bool(&versionFlag, "v", "version", "Displays the program version.")
+
 	flaggy.SetName("senv")
 	flaggy.SetDescription("Switch your .env file")
-	flaggy.SetVersion(fmt.Sprintf("senv %s <%s>", version, getCommit()))
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
 
@@ -64,6 +68,8 @@ func main() {
 	}
 
 	switch {
+	case versionFlag:
+		fmt.Fprintf(os.Stdout, "senv %s <%s>\n", version, getCommit())
 	case completion.Used:
 		if err := cmd.Completion(completionsFolder, completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
