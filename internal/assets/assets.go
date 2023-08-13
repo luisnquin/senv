@@ -1,13 +1,16 @@
 package assets
 
-import _ "embed"
+import (
+	_ "embed"
+)
 
 var (
-	//go:embed .env.tpl
+	//go:embed templates/.env.tpl
 	dotEnvTpl string
-	// go:embed helpTpl.tpl
+	//go:embed templates/help.tpl
 	helpTpl string
 )
 
 func GetDotEnvTpl() string { return dotEnvTpl }
-func GetHelpTpl() string   { return helpTpl }
+
+func GetHelpTpl() string { return helpTpl }
