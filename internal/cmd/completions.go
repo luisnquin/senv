@@ -4,11 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/fs"
 	"os"
+
+	"github.com/luisnquin/senv/internal/assets"
 )
 
-func Completion(completionsFolder fs.FS, shell string) error {
+func Completion(shell string) error {
+	completionsFolder := assets.GetCompletionsFolder()
 	compFilePath := fmt.Sprintf("completions/completions.%s", shell)
 
 	f, err := completionsFolder.Open(compFilePath)

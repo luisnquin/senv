@@ -1,8 +1,6 @@
 package main
 
 import (
-	"embed"
-	_ "embed"
 	"os"
 	"runtime/debug"
 
@@ -16,11 +14,6 @@ import (
 var (
 	version = internal.DEFAULT_VERSION
 	commit  string
-
-	//go:embed docs/senv.example.yaml
-	genericConfigFile []byte
-	//go:embed completions
-	completionsFolder embed.FS
 )
 
 func main() {
@@ -71,7 +64,7 @@ func main() {
 			log.Pretty.Fatal(err.Error())
 		}
 	case completion.Used:
-		if err := cmd.Completion(completionsFolder, completionShellArg); err != nil {
+		if err := cmd.Completion(completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	case ls.Used:
@@ -87,7 +80,7 @@ func main() {
 			log.Pretty.Fatal(err.Error())
 		}
 	case init.Used:
-		if err := cmd.Init(genericConfigFile); err != nil {
+		if err := cmd.Init(); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	default:

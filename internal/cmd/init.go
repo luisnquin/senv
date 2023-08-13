@@ -3,10 +3,13 @@ package cmd
 import (
 	"errors"
 	"os"
+
+	"github.com/luisnquin/senv/internal/assets"
 )
 
-func Init(configFile []byte) error {
-	const configFilePath = "./senv.yaml"
+func Init() error {
+	configFile := assets.GetExampleConfig()
+	configFilePath := "./senv.yaml"
 
 	_, err := os.Stat(configFilePath)
 	if err == nil {
