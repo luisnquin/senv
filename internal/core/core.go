@@ -8,16 +8,13 @@ import (
 	"path/filepath"
 	"text/template"
 
+	"github.com/luisnquin/senv/internal/assets"
 	"github.com/luisnquin/senv/internal/fsutils"
 	"github.com/samber/lo"
 )
 
-var (
-	// Possible config files.
-	configFiles = []string{"senv.yaml", "senv.yml"}
-	//go:embed .env.tpl
-	dotEnvTpl string
-)
+// Possible config files.
+var configFiles = []string{"senv.yaml", "senv.yml"}
 
 // Returns the content of an .env file generated from the given environment variables configuration.
 //
@@ -43,7 +40,7 @@ func GenerateDotEnv(e Environment, useExportPrefix bool) ([]byte, error) {
 		"useExport":  useExportPrefix,
 	}
 
-	t := template.Must(template.New(".env").Parse(dotEnvTpl))
+	t := template.Must(template.New(".env").Parse(assets.GetDotEnvTpl()))
 
 	if err := t.Execute(&b, data); err != nil {
 		return nil, err

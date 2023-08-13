@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 
 	"github.com/integrii/flaggy"
+	"github.com/luisnquin/senv/internal/assets"
 	"github.com/luisnquin/senv/internal/cmd"
 	"github.com/luisnquin/senv/internal/log"
 )
@@ -18,8 +19,6 @@ var (
 	version = DEFAULT_VERSION
 	commit  string
 
-	//go:embed help.tpl
-	helpTpl string
 	//go:embed docs/senv.example.yaml
 	genericConfigFile []byte
 	//go:embed completions
@@ -56,7 +55,7 @@ func main() {
 	flaggy.SetName("senv")
 	flaggy.SetDescription("Switch your .env file")
 	flaggy.SetVersion(fmt.Sprintf("senv %s <%s>", version, getCommit()))
-	flaggy.DefaultParser.SetHelpTemplate(helpTpl)
+	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
 
 	currentDir, err := os.Getwd()
