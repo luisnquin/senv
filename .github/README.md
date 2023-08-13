@@ -71,13 +71,6 @@ Completions are very simple.
   $ source <(senv completion bash)
 ```
 
-## TODO
-
-- CI
-- Unit && E2E tests
-- Support multiple *.env files as providers
-- Completions for 'to' subcommand
-
 ## LICENSE
 
 [MIT](../LICENSE)
