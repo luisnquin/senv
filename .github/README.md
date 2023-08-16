@@ -23,6 +23,24 @@ $ go install github.com/luisnquin/senv@latest
 
 [![demo](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8.svg)](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8)
 
+## Try it with Nix ❄️
+
+```bash
+# Creates a senv.yaml file in your current folder
+$ nix run github:luisnquin/senv -- init
+
+# Lists your declared environments
+$ nix run github:luisnquin/senv -- ls
+
+# Run a prompt that allows you to select an environment
+$ nix run github:luisnquin/senv
+
+# Help
+$ nix run github:luisnquin/senv -- --help
+
+# ...
+```
+
 ## Settings file
 
 The program requires a **senv.yaml** or **senv.yml** file. You can call the program in any subdirectory
