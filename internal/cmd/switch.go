@@ -13,12 +13,18 @@ import (
 // Creates a prompt selector that allows the user to select the environment to switch.
 func Switch(currentDir string) error {
 	if !core.WorkDirHasProgramFiles(currentDir) {
-		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
+		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`")
 	}
 
 	settings, err := core.LoadUserPreferences()
 	if err != nil {
 		return err
+	}
+
+	var activeEnv string
+
+	if envFilePath, err := settings.GetEnvFilePath(); err == nil {
+		activeEnv = getActiveEnvironment(envFilePath)
 	}
 
 	envNames := make([]string, len(settings.Environments))
@@ -27,7 +33,7 @@ func Switch(currentDir string) error {
 		envNames[i] = env.Name
 	}
 
-	selected, ok := prompt.ListSelector("Select an environment", envNames)
+	selected, ok := prompt.ListSelector("Select an environment", envNames, activeEnv)
 	if !ok {
 		os.Exit(1)
 	}

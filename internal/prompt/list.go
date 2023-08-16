@@ -7,28 +7,50 @@ import (
 	"github.com/manifoldco/promptui/list"
 )
 
-func ListSelector(label string, options []string) (string, bool) {
+type option struct {
+	Name     string
+	Selected bool
+}
+
+func ListSelector(label string, options []string, selected string) (string, bool) {
+	opts := make([]option, len(options))
+
+	for i, opt := range options {
+		opts[i] = option{
+			Name:     opt,
+			Selected: opt == selected,
+		}
+	}
+
+	templates := &promptui.SelectTemplates{
+		Label:    "{{ . }}:",
+		Active:   `▸ {{ .Name | cyan }} {{if .Selected}}{{ "(current)" | magenta }}{{end}}`,
+		Inactive: `  {{ .Name | cyan }} {{if .Selected}}{{ "(current)" | magenta }}{{end}}`,
+		Selected: "▸ {{ .Name | cyan }}",
+	}
+
 	s := promptui.Select{
 		Label:             label,
-		Items:             options,
-		Searcher:          searcher(options),
+		Items:             opts,
+		Searcher:          searcher(opts),
+		Templates:         templates,
 		StartInSearchMode: true,
 		HideHelp:          true,
 		Size:              10,
 		HideSelected:      true,
 	}
 
-	_, selected, err := s.Run()
+	i, _, err := s.Run()
 	if err != nil {
 		return "", false
 	}
 
-	return selected, true
+	return opts[i].Name, true
 }
 
-func searcher(targets []string) list.Searcher {
+func searcher(targets []option) list.Searcher {
 	return func(input string, index int) bool {
-		if strings.Contains(strings.ToLower(targets[index]), input) {
+		if strings.Contains(strings.ToLower(targets[index].Name), input) {
 			return true
 		}
 
