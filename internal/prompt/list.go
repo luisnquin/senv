@@ -24,7 +24,7 @@ func ListSelector(label string, options []string, selected string) (string, bool
 
 	templates := &promptui.SelectTemplates{
 		Label:    "{{ . }}:",
-		Active:   `▸ {{ .Name | cyan }} {{if .Selected}}{{ "(current)" | magenta }}{{end}}`,
+		Active:   `▸ {{ .Name | cyan | underline }} {{if .Selected}}{{ "(current)" | magenta }}{{end}}`,
 		Inactive: `  {{ .Name | cyan }} {{if .Selected}}{{ "(current)" | magenta }}{{end}}`,
 		Selected: "▸ {{ .Name | cyan }}",
 	}
