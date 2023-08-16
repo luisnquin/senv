@@ -12,16 +12,60 @@ You can call the program in any subdirectory of your project and the program wil
 It's highly inspired by [VSCode - .ENV Switcher](https://marketplace.visualstudio.com/items?itemName=EcksDy.env-switcher) but only deals with a single
 configuration file and can be called directly from the command line.
 
+## Demo
+
+[![demo](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8.svg)](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8)
+
 ## Install
+
+### Via Go
 
 ```bash
 # Requires go >=1.18
 $ go install github.com/luisnquin/senv@latest
 ```
 
-## Demo
+### Via Nix flakes
 
-[![demo](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8.svg)](https://asciinema.org/a/eZrIbb4eDxX0tO7fWyFop2Zg8)
+```nix
+{
+  inputs = {
+    senv.url = "github:luisnquin/senv";
+  };
+
+  outputs = inputs @ {
+    senv,
+    ...
+  }: let
+    system = "x86_64-linux";
+
+    specialArgs = {
+      senv-switcher = senv.defaultPackage.${system};
+    };
+  in {
+    # Home manager
+    homeConfigurations."..." = home-manager.lib.homeManagerConfiguration {
+      extraSpecialArgs = specialArgs;
+
+      modules = [
+        # add "senv-switcher" to your home.packages
+        ./home.nix
+      ];
+    };
+
+    # Or NixOS configuration
+    nixosConfigurations."..." = lib.nixosSystem {
+        specialArgs = specialArgs;
+
+        modules = [
+          # add "senv-switcher" to your environment.systemPackages
+          ./configuration.nix
+        ];
+      };
+    };
+}
+
+```
 
 ## Try it with Nix ❄️
 
