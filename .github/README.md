@@ -87,8 +87,7 @@ $ nix run github:luisnquin/senv -- --help
 
 ## Settings file
 
-The program requires a **senv.yaml** or **senv.yml** file. You can call the program in any subdirectory
-of the project but for that it requires that the **settings file** is at the same level of your **.git folder**.
+The program requires a **senv.yaml** or **senv.yml** file and you can call the program in any subdirectory of the project.
 
 ### Example
 
