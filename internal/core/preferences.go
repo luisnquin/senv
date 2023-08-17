@@ -1,7 +1,6 @@
 package core
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -27,25 +26,33 @@ type UserPreferences struct {
 
 // An user defined environment.
 type Environment struct {
-	Name      string         `yaml:"name"`
+	// The environment name.
+	Name string `yaml:"name"`
+	// Key value pairs for the environment.
+	//
+	// Is expected when serialized it will look
+	// like this:
+	//
+	// 	FOO=bar
+	// 	BAR=foo
 	Variables map[string]any `yaml:"variables"`
 }
 
-var ErrConfigNotFound = errors.New("senv.yaml file not found")
-
+// Find, validate and deserialize the senv.yaml or senv.yml files in the
+// current directory or parents.
 func LoadUserPreferences() (*UserPreferences, error) {
 	currentPath, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
 
-	workDirPath := workDirHasProgramFiles(currentPath, false)
+	workDirPath := getDirWithConfig(currentPath)
 
 	c := &UserPreferences{
 		WorkDirectory: workDirPath,
 	}
 
-	for _, fileName := range configFiles {
+	for _, fileName := range getConfigFiles() {
 		configPath := filepath.Join(workDirPath, fileName)
 
 		info, err := os.Stat(configPath)
@@ -73,9 +80,10 @@ func LoadUserPreferences() (*UserPreferences, error) {
 		}
 	}
 
-	return nil, ErrConfigNotFound
+	return nil, getErrConfigNotFound()
 }
 
+// Returns the destiny path of the .env file to be generated.
 func (c UserPreferences) GetEnvFilePath() (string, error) {
 	if filepath.IsAbs(c.EnvFile) {
 		return c.EnvFile, nil

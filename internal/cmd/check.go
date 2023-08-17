@@ -12,7 +12,7 @@ func Check() error {
 		return err
 	}
 
-	if !core.WorkDirHasProgramFiles(currentDir) {
+	if !core.HasConfigFiles(currentDir) {
 		os.Exit(1)
 	}
 

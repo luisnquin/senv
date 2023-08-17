@@ -3,7 +3,6 @@ package core
 import (
 	"bytes"
 	_ "embed"
-	"errors"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -14,7 +13,9 @@ import (
 )
 
 // Possible config files.
-var configFiles = []string{"senv.yaml", "senv.yml"}
+func getConfigFiles() []string {
+	return []string{"senv.yaml", "senv.yml"}
+}
 
 // Returns the content of an .env file generated from the given environment variables configuration.
 //
@@ -49,25 +50,31 @@ func GenerateDotEnv(e Environment, useExportPrefix bool) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-// If returns a boolean wether is a YAML and/or .env files in the current working
-// directory, it performs a folder tree traversal to above until find a .git folder
-// if even in that case no single useful file is found then `false` value is returned.
-func WorkDirHasProgramFiles(fromDir string) bool {
-	path := workDirHasProgramFiles(fromDir, false)
+// Returns a boolean if the current of a parent directory contains config files
+// like: senv.yaml or senv.yml.
+func HasConfigFiles(fromDir string) bool {
+	path := getDirWithConfig(fromDir)
 
 	return path != ""
 }
 
-func resolveUsableWorkDir(fromDir string) (string, error) {
-	path := workDirHasProgramFiles(fromDir, false)
+// Tries to find senv.yaml or senv.yml files in the current directory or parents.
+//
+// If is the root directory and no config file is found then it returns an error.
+func ResolveDirWithConfig(fromDir string) (string, error) {
+	path := getDirWithConfig(fromDir)
 	if path == "" {
-		return "", errors.New("work directory cannot be resolved")
+		return "", getErrUnableToResolveWorkDir()
 	}
 
 	return path, nil
 }
 
-func workDirHasProgramFiles(searchDir string, gitFolderFoundOnce bool) string {
+// Tries to find senv.yaml or senv.yml files in the current directory or parents.
+//
+// If is the root directory and no config file is found then it an empty string
+// is returned.
+func getDirWithConfig(searchDir string) string {
 	dirEntries, err := os.ReadDir(searchDir)
 	if err != nil {
 		return ""
@@ -80,13 +87,9 @@ func workDirHasProgramFiles(searchDir string, gitFolderFoundOnce bool) string {
 
 		fileName := entry.Name()
 
-		if lo.Contains(configFiles, fileName) {
+		if lo.Contains(getConfigFiles(), fileName) {
 			return searchDir
 		}
-	}
-
-	if gitFolderFoundOnce {
-		return ""
 	}
 
 	parentDir := filepath.Dir(searchDir)
@@ -96,8 +99,10 @@ func workDirHasProgramFiles(searchDir string, gitFolderFoundOnce bool) string {
 			break
 		}
 
-		if fsutils.DirExists(filepath.Join(parentDir, ".git")) {
-			return workDirHasProgramFiles(parentDir, true)
+		for _, cf := range getConfigFiles() {
+			if fsutils.FileExists(filepath.Join(parentDir, cf)) {
+				return parentDir
+			}
 		}
 
 		parentDir = filepath.Dir(parentDir)

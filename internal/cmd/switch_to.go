@@ -8,7 +8,7 @@ import (
 )
 
 func SwitchTo(currentDir, envToSwitch string) error {
-	if !core.WorkDirHasProgramFiles(currentDir) {
+	if !core.HasConfigFiles(currentDir) {
 		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
 	}
 
