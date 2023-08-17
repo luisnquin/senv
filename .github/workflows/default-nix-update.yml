@@ -7,8 +7,6 @@ jobs:
   update:
     name: Update default.nix
     runs-on: ubuntu-20.04
-    env:
-       GITHUB_TOKEN: "${ secrets.CREATE_PULL_REQUEST_TOKEN }"
     steps:
       - uses: actions/checkout@v3
       - name: Update version and commit
@@ -22,8 +20,9 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           branch: default-nix-update
+
           delete-branch: true
-          token: "${{ env.GITHUB_TOKEN }}"
+          token: "${{ secrets.PULL_REQUEST_BOT_TOKEN }}"
           title: "Updated default.nix version and commit"
           commit-message: "feat(default.nix): updated version and commit"
           committer: Luis Quiñones Requelme <lpaandres2020@gmail.com>
