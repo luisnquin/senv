@@ -1,0 +1,32 @@
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  update:
+    name: Update default.nix
+    runs-on: ubuntu-20.04
+    env:
+      CREATE_PULL_REQUEST_TOKEN: "${ secrets.CREATE_PULL_REQUEST_TOKEN }"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update version and commit
+        run: |
+          LATEST_COMMIT=$(git rev-parse HEAD)
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+
+          sed -i "s/commit = \".*\";/commit = \"$LATEST_COMMIT\";/g" default.nix
+          sed -i "s/version = \".*\";/version = \"$LATEST_TAG\";/g" default.nix
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: default-nix-update
+          delete-branch: true
+          token: "${{ env.CREATE_PULL_REQUEST_TOKEN }}"
+          title: "Updated default.nix version and commit"
+          commit-message: "feat(default.nix): updated version and commit"
+          committer: Luis Quiñones Requelme <lpaandres2020@gmail.com>
+          base: main
+          body: |
+            Automated changes by **nix-update** Action.
