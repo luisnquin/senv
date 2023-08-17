@@ -2,4 +2,4 @@ build/
 senv.yaml
 sketch.txt
 .env
-result/
+result
