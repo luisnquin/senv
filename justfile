@@ -8,3 +8,6 @@ build dst='./build/main':
     @go build -ldflags="-X main.version={{latest_git_tag}} -X main.commit={{latest_git_commit}}" -o {{dst}} ./
 
 install: (build '/home/$USER/go/bin/senv')
+
+clean:
+    rm -rf ./result
