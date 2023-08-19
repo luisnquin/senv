@@ -10,7 +10,10 @@ in
     pname = "senv";
     inherit version;
 
-    src = ./.;
+    src = builtins.path {
+      name = "senv-switcher";
+      path = ./.;
+    };
 
     vendorSha256 = "sha256-C33Kj6PXoXa3OuH1ZP5kDJGR+BNaqbDrDGNtVpYgHZU=";
     doCheck = true;
