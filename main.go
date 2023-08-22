@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"runtime/debug"
 
-	"github.com/integrii/flaggy"
+	"github.com/luisnquin/flaggy"
 	"github.com/luisnquin/senv/internal"
 	"github.com/luisnquin/senv/internal/assets"
 	"github.com/luisnquin/senv/internal/cmd"
@@ -43,13 +44,9 @@ func main() {
 	flaggy.AttachSubcommand(completion, 1)
 	completion.AddPositionalValue(&completionShellArg, "shell", 1, true, "Supported shells: zsh && bash")
 
-	var versionFlag bool
-
-	flaggy.DefaultParser.ShowVersionWithVersionFlag = false // Thanks but ugly
-	flaggy.Bool(&versionFlag, "v", "version", "Displays the program version.")
-
 	flaggy.SetName(internal.PROGRAM_NAME)
 	flaggy.SetDescription("Switch your .env file")
+	flaggy.SetVersion(getVersion())
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
 
@@ -59,10 +56,6 @@ func main() {
 	}
 
 	switch {
-	case versionFlag:
-		if err := cmd.Version(version, commit); err != nil {
-			log.Pretty.Fatal(err.Error())
-		}
 	case completion.Used:
 		if err := cmd.Completion(completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
@@ -101,4 +94,16 @@ func getCommit() string {
 	}
 
 	return commit
+}
+
+func getVersion() string {
+	if version == "" {
+		version = internal.DEFAULT_VERSION
+	}
+
+	if commit != "" {
+		commit = fmt.Sprintf("<%s>", commit)
+	}
+
+	return fmt.Sprintf("%s %s %s", internal.PROGRAM_NAME, version, commit)
 }
