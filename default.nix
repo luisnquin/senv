@@ -15,7 +15,7 @@ in
       path = ./.;
     };
 
-    vendorSha256 = "sha256-C33Kj6PXoXa3OuH1ZP5kDJGR+BNaqbDrDGNtVpYgHZU=";
+    vendorSha256 = "sha256-qTgdWQKCkNCOxFLM77wMvbPvwHOkBOPzRP8a10hZuqw=";
     doCheck = true;
 
     buildTarget = ".";
