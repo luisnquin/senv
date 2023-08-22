@@ -17,10 +17,6 @@ var (
 )
 
 func main() {
-	check := flaggy.NewSubcommand("check")
-	check.Description = "Check if the current working directory has `senv.yaml` or `senv.yml` files"
-	flaggy.AttachSubcommand(check, 1)
-
 	var toSwitchArg string
 
 	to := flaggy.NewSubcommand("to")
@@ -35,6 +31,10 @@ func main() {
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
 	flaggy.AttachSubcommand(init, 1)
+
+	out := flaggy.NewSubcommand("out")
+	out.Description = "Print your current environment to stdout, exits with status code 1 if it can't"
+	flaggy.AttachSubcommand(out, 1)
 
 	var completionShellArg string
 
@@ -67,6 +67,10 @@ func main() {
 		if err := cmd.Completion(completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
 		}
+	case out.Used:
+		if err := cmd.Out(); err != nil {
+			log.Pretty.Fatal(err.Error())
+		}
 	case ls.Used:
 		if err := cmd.Ls(currentDir); err != nil {
 			log.Pretty.Error(err.Error())
@@ -74,10 +78,6 @@ func main() {
 	case to.Used:
 		if err := cmd.SwitchTo(currentDir, toSwitchArg); err != nil {
 			log.Pretty.Error(err.Error())
-		}
-	case check.Used:
-		if err := cmd.Check(); err != nil {
-			log.Pretty.Fatal(err.Error())
 		}
 	case init.Used:
 		if err := cmd.Init(); err != nil {
