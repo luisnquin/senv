@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gookit/color v1.5.4
-	github.com/luisnquin/flaggy v0.1.1
+	github.com/luisnquin/flaggy v0.1.2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/samber/lo v1.38.1
 	gopkg.in/yaml.v3 v3.0.1
