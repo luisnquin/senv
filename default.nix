@@ -3,8 +3,8 @@
   buildGoModule,
   lib,
 }: let
-  version = "v0.5.0";
-  commit = "c1d04585d83ec229fa4ce2033c45ba41af6f9981";
+  version = "v0.5.1";
+  commit = "d1eaa3e287f5b619424cc6cdaf1e62791d49a277";
 in
   buildGoModule rec {
     pname = "senv";
