@@ -3,6 +3,10 @@ on:
     types:
       - released
 
+env:
+  committer_name: Lucy Diniz
+  committer_email: lucydiniz.rs@gmail.com
+
 jobs:
   update:
     name: Update default.nix
@@ -24,8 +28,8 @@ jobs:
           delete-branch: true
           token: "${{ secrets.PULL_REQUEST_BOT_TOKEN }}"
           title: "Updated default.nix version and commit"
-          commit-message: "feat(default.nix): updated version and commit"
-          committer: Luis Quiñones Requelme <lpaandres2020@gmail.com>
+          commit-message: "chore(nix): updated version and commit"
+          committer: ${{env.committer_name}} <${{env.committer_email}}>
           base: main
           body: |
             Automated changes by **nix-update** Action.
