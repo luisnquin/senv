@@ -18,6 +18,9 @@ linters-settings:
         deny:
           - pkg: reflect
             desc: Please don't use this
+  funlen:
+    lines: 70
+    statements: 40
   gomnd:
     ignored-functions:
       - make
