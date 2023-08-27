@@ -100,6 +100,12 @@ func (c UserPreferences) GetEnvFilePath() (string, error) {
 	return filepath.Join(c.WorkDirectory, c.EnvFile), nil
 }
 
+func (c *UserPreferences) Encode() []byte {
+	data, _ := yaml.Marshal(c)
+
+	return data
+}
+
 func (c *UserPreferences) validate() error {
 	namesRegister := make(map[string]struct{}, len(c.Environments))
 

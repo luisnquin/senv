@@ -3,6 +3,7 @@ module github.com/luisnquin/senv
 go 1.18
 
 require (
+	github.com/deckarep/golang-set/v2 v2.3.1
 	github.com/gookit/color v1.5.4
 	github.com/luisnquin/flaggy v0.1.2
 	github.com/manifoldco/promptui v0.9.0
