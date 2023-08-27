@@ -18,12 +18,12 @@ func Ls(currentDir string) error {
 		return err
 	}
 
-	envFilePath, err := settings.GetEnvFilePath()
+	switcher := NewSwitcher(settings)
+
+	active, err := switcher.GetActiveEnvironment()
 	if err != nil {
 		return err
 	}
-
-	activeEnv := getActiveEnvironment(envFilePath)
 
 	envNames := make([]string, len(settings.Environments))
 
@@ -41,7 +41,7 @@ func Ls(currentDir string) error {
 	for _, name := range envNames {
 		activeLabel := ""
 
-		if name == activeEnv {
+		if name == active {
 			activeLabel = activePrinter.Sprint("(active)")
 		}
 

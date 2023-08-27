@@ -1,13 +1,11 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 
 	"github.com/luisnquin/senv/internal/core"
 	"github.com/luisnquin/senv/internal/log"
 	"github.com/luisnquin/senv/internal/prompt"
-	"github.com/samber/lo"
 )
 
 // Creates a prompt selector that allows the user to select the environment to switch.
@@ -21,10 +19,11 @@ func Switch(currentDir string) error {
 		return err
 	}
 
-	var activeEnv string
+	switcher := NewSwitcher(settings)
 
-	if envFilePath, err := settings.GetEnvFilePath(); err == nil {
-		activeEnv = getActiveEnvironment(envFilePath)
+	activeEnv, err := switcher.GetActiveEnvironment()
+	if err != nil {
+		return err
 	}
 
 	envNames := make([]string, len(settings.Environments))
@@ -38,36 +37,11 @@ func Switch(currentDir string) error {
 		os.Exit(1)
 	}
 
-	if err := switchDotEnvFileFromName(settings, selected, settings.UseExportPrefix); err != nil {
+	if err := switcher.Switch(selected); err != nil {
 		return err
 	}
 
 	log.Pretty.Messagef("Switched to '%s'", selected)
-
-	return nil
-}
-
-func switchDotEnvFileFromName(preferences *core.UserPreferences, envToSwitch string, useExportPrefix bool) error {
-	environment, ok := lo.Find(preferences.Environments, func(e core.Environment) bool {
-		return e.Name == envToSwitch
-	})
-	if !ok {
-		return errors.New("environment not found")
-	}
-
-	dotEnvData, err := core.GenerateDotEnv(environment, useExportPrefix)
-	if err != nil {
-		return err
-	}
-
-	envFilePath, err := preferences.GetEnvFilePath()
-	if err != nil {
-		return err
-	}
-
-	if err := os.WriteFile(envFilePath, dotEnvData, os.ModePerm); err != nil {
-		return err
-	}
 
 	return nil
 }

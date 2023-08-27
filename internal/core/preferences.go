@@ -8,35 +8,43 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// The user preferences.
-type UserPreferences struct {
-	// User defined environments.
-	Environments []Environment `yaml:"envs"`
-	// Default variables for all the environments.
-	Defaults map[string]any `yaml:"defaults"`
-	// The relative or absolute path to the env file.
-	EnvFile string `yaml:"envFile"`
-	// Indicates whether to use the 'export' prefix in the final .env file or not.
-	UseExportPrefix bool `yaml:"useExportPrefix"`
-	// The working directory absolute path.
-	WorkDirectory string `yaml:"-"`
-	// The path of the file associated with the loaded preferences.
-	SourceFilePath string `yaml:"-"`
-}
+type (
+	// Environment variable settings for the project.
+	UserPreferences struct {
+		Binds map[string]Bind `yaml:"binds"`
+		// User defined environments.
+		Environments []Environment `yaml:"environments"`
+		// Default variables for all the environments.
+		Defaults map[string]string `yaml:"defaults"`
+		// The relative or absolute path to the env file.
+		EnvFile string `yaml:"env_file"`
+		// Indicates whether to use the 'export' prefix in the final .env file or not.
+		UseExportPrefix bool `yaml:"use_export_prefix"`
+		// The working directory absolute path.
+		WorkDirectory string `yaml:"-"`
+		// The path of the file associated with the loaded preferences.
+		SourceFilePath string `yaml:"-"`
+	}
 
-// An user defined environment.
-type Environment struct {
-	// The environment name.
-	Name string `yaml:"name"`
-	// Key value pairs for the environment.
-	//
-	// Is expected when serialized it will look
-	// like this:
-	//
-	// 	FOO=bar
-	// 	BAR=foo
-	Variables map[string]any `yaml:"variables"`
-}
+	Bind struct {
+		Use     string   `yaml:"use"`
+		Options []string `yaml:"options"`
+	}
+
+	// An user defined environment.
+	Environment struct {
+		// The environment name.
+		Name string `yaml:"name"`
+		// Key value pairs for the environment.
+		//
+		// Is expected when serialized it will look
+		// like this:
+		//
+		// 	FOO=bar
+		// 	BAR=foo
+		Variables map[string]string `yaml:"variables"`
+	}
+)
 
 // Find, validate and deserialize the senv.yaml or senv.yml files in the
 // current directory or parents.

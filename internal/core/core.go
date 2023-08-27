@@ -3,6 +3,7 @@ package core
 import (
 	"bytes"
 	_ "embed"
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -32,22 +33,48 @@ func getConfigFiles() []string {
 //	export DB_HOST="localhost"
 //	export DB_USER="root"
 //	export DB_PASSWORD="no_password"
-func GenerateDotEnv(e Environment, useExportPrefix bool) ([]byte, error) {
+func GenerateDotEnv(e Environment, binds map[string]string, useExportPrefix bool) ([]byte, error) {
 	var b bytes.Buffer
+
+	dotEnvTpl := template.Must(template.New(".env").Parse(assets.GetDotEnvTpl()))
+
+	variables, err := getParsedVariables(e.Variables, binds)
+	if err != nil {
+		return nil, err
+	}
 
 	data := map[string]any{
 		"sourceName": e.Name,
-		"variables":  e.Variables,
+		"variables":  variables,
 		"useExport":  useExportPrefix,
 	}
 
-	t := template.Must(template.New(".env").Parse(assets.GetDotEnvTpl()))
-
-	if err := t.Execute(&b, data); err != nil {
+	if err := dotEnvTpl.Execute(&b, data); err != nil {
 		return nil, err
 	}
 
 	return b.Bytes(), nil
+}
+
+func getParsedVariables(originalVars map[string]string, binds map[string]string) (map[string]string, error) {
+	vars := make(map[string]string, len(originalVars))
+
+	for name, value := range originalVars {
+		t, err := template.New(name).Parse(value)
+		if err != nil {
+			return nil, err
+		}
+
+		var b bytes.Buffer
+
+		if err := t.Execute(&b, binds); err != nil {
+			return nil, fmt.Errorf("unable to parse %s: %w", name, err)
+		}
+
+		vars[name] = b.String()
+	}
+
+	return vars, nil
 }
 
 // Returns a boolean if the current of a parent directory contains config files

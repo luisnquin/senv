@@ -14,13 +14,10 @@ func Out() error {
 		os.Exit(1)
 	}
 
-	envFilePath, err := settings.GetEnvFilePath()
-	if err != nil {
-		os.Exit(1)
-	}
+	switcher := NewSwitcher(settings)
 
-	activeEnv := getActiveEnvironment(envFilePath)
-	if activeEnv == "" {
+	activeEnv, err := switcher.GetActiveEnvironment()
+	if err != nil {
 		os.Exit(1)
 	}
 
