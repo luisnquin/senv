@@ -1,23 +1,30 @@
-
+# The latest tag in the local repository.
 latest_git_tag := `git describe --tags --abbrev=0`
+# The latest commit in the local repository.
 latest_git_commit := `git rev-parse origin/main`
 
+# When everything works as expected.
 success_emoji := `printf "\\033[1;32m✔\\033[0m"`
-# warning_emoji := `printf "\\033[38;2;209;214;114m!\\033[0m"`
+# When something wrong happens.
 error_emoji := `printf "\\033[0;31m✘\\033[0m"`
 
+# Build the project in the build directory by default.
 build dst='./build/main':
     @go build -ldflags="-X main.version={{latest_git_tag}} -X main.commit={{latest_git_commit}}" -o {{dst}} ./cmd/senv/
 
+# Remove all build files.
 clean:
     rm -rf ./result ./build/*
 
-install: (build '/home/$USER/go/bin/senv')
+# Install the program in your $GOPATH/bin.
+install: (build '$GOPATH/bin/senv')
 
+# Run all the available Go tests in the source code.
 test:
     @echo "Source code testing results:"
     @go clean -testcache && go test ./...
 
+# Test and build the source code, if possible try to compile it with Nix.
 test-suite: test
     @printf "Does it purely build? "
     @if just build; then echo "{{success_emoji}}"; else echo "{{error_emoji}}"; fi
