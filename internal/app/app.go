@@ -1,9 +1,7 @@
-package main
+package app
 
 import (
-	"fmt"
 	"os"
-	"runtime/debug"
 
 	"github.com/luisnquin/flaggy"
 	"github.com/luisnquin/senv/internal"
@@ -12,12 +10,7 @@ import (
 	"github.com/luisnquin/senv/internal/log"
 )
 
-var (
-	version = internal.DEFAULT_VERSION
-	commit  string
-)
-
-func main() {
+func Run(version, commit string) int {
 	var toSwitchArg string
 
 	to := flaggy.NewSubcommand("to")
@@ -46,7 +39,7 @@ func main() {
 
 	flaggy.SetName(internal.PROGRAM_NAME)
 	flaggy.SetDescription("Switch your .env file")
-	flaggy.SetVersion(getVersion())
+	flaggy.SetVersion(version)
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
 
@@ -81,29 +74,6 @@ func main() {
 			log.Pretty.Error(err.Error())
 		}
 	}
-}
 
-func getCommit() string {
-	info, ok := debug.ReadBuildInfo()
-	if ok {
-		for _, kv := range info.Settings {
-			if kv.Key == "vcs.revision" {
-				return kv.Value
-			}
-		}
-	}
-
-	return commit
-}
-
-func getVersion() string {
-	if version == "" {
-		version = internal.DEFAULT_VERSION
-	}
-
-	if commit != "" {
-		commit = fmt.Sprintf("<%s>", commit)
-	}
-
-	return fmt.Sprintf("%s %s %s", internal.PROGRAM_NAME, version, commit)
+	return 0
 }

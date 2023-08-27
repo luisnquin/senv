@@ -18,7 +18,7 @@ in
     vendorSha256 = "sha256-B6e1U8eDxXaB+3Skt/DxwWlF/33jJ07F+RT1ABCFiSw=";
     doCheck = true;
 
-    buildTarget = ".";
+    buildTarget = "./cmd/senv";
     ldflags = ["-X main.version=${version} -X main.commit=${commit}"];
 
     meta = with lib; {
