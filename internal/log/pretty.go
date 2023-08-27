@@ -19,6 +19,14 @@ func (p prettyPrinter) Messagef(template string, more ...any) {
 	p.Message(fmt.Sprintf(template, more...))
 }
 
+func (p prettyPrinter) Warn(message string) {
+	fmt.Fprint(os.Stderr, color.HEX("#ebe973").Sprintf("Warning: %s\n", message))
+}
+
+func (p prettyPrinter) Warnf(template string, more ...any) {
+	p.Warn(fmt.Sprintf(template, more...))
+}
+
 func (p prettyPrinter) Error(message string) {
 	fmt.Fprint(os.Stderr, color.HEX("#e63758").Sprintf("Error: %s\n", message))
 }
