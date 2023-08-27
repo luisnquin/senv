@@ -15,10 +15,14 @@ var (
 )
 
 func main() {
-	os.Exit(app.Run(getVersion(), getCommit()))
+	os.Exit(app.Run(getProgramVersion()))
 }
 
 func getCommit() string {
+	if commit != "" {
+		return commit
+	}
+
 	info, ok := debug.ReadBuildInfo()
 	if ok {
 		for _, kv := range info.Settings {
@@ -28,14 +32,15 @@ func getCommit() string {
 		}
 	}
 
-	return commit
+	return ""
 }
 
-func getVersion() string {
+func getProgramVersion() string {
 	if version == "" {
 		version = internal.DEFAULT_VERSION
 	}
 
+	commit := getCommit()
 	if commit != "" {
 		commit = fmt.Sprintf("<%s>", commit)
 	}

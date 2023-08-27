@@ -17,7 +17,7 @@ func RunMain(args ...string) (int, string) {
 	oldOut := os.Stdout
 	os.Stdout = w
 
-	code := app.Run(internal.DEFAULT_VERSION, "")
+	code := app.Run(internal.DEFAULT_VERSION)
 
 	outC := make(chan string)
 
@@ -29,6 +29,7 @@ func RunMain(args ...string) (int, string) {
 	}()
 
 	w.Close()
+
 	os.Stdout = oldOut
 
 	return code, <-outC

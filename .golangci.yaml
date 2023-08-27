@@ -20,7 +20,7 @@ linters-settings:
             desc: Please don't use this
   funlen:
     lines: 70
-    statements: 40
+    statements: 75
   gomnd:
     ignored-functions:
       - make

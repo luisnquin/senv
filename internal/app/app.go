@@ -10,7 +10,7 @@ import (
 	"github.com/luisnquin/senv/internal/log"
 )
 
-func Run(version, commit string) int {
+func Run(internalVersion string) int {
 	var toSwitchArg string
 
 	to := flaggy.NewSubcommand("to")
@@ -39,7 +39,7 @@ func Run(version, commit string) int {
 
 	flaggy.SetName(internal.PROGRAM_NAME)
 	flaggy.SetDescription("Switch your .env file")
-	flaggy.SetVersion(version)
+	flaggy.SetVersion(internalVersion)
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
 	flaggy.Parse()
 
