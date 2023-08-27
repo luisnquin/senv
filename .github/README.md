@@ -151,6 +151,23 @@ DATABASE_PORT="5432"
   $ source <(senv completion bash)
 ```
 
+## Integrations
+
+### [Starship](https://starship.rs/)
+
+```toml
+# starship.toml
+format = "${custom.environment_name}" # more...
+
+[custom.environment_name]
+command = "senv out"
+description = "Displays the name of your current senv environment"
+format = "using [($output )]($style)"
+shell = ["bash", "--noprofile", "--norc"]
+style = "#a8e046"
+when = "senv out"
+```
+
 ## LICENSE
 
 [MIT](../LICENSE)
