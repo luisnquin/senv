@@ -1,7 +1,9 @@
 # The latest tag in the local repository.
 latest_git_tag := `git describe --tags --abbrev=0`
 # The latest commit in the local repository.
-latest_git_commit := `git rev-parse origin/main`
+latest_git_commit := `git rev-parse HEAD`
+
+
 
 # When everything works as expected.
 success_emoji := `printf "\\033[1;32m✔\\033[0m"`
