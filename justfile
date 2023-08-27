@@ -24,14 +24,14 @@ test:
     @echo "Source code testing results:"
     @go clean -testcache && go test ./...
 
-# Test and build the source code, if possible try to compile it with Nix.
-test-suite: test
+# Build the project with and without Nix.
+build-test:
     @printf "Does it purely build? "
     @if just build; then echo "{{success_emoji}}"; else echo "{{error_emoji}}"; fi
 
     @printf "Does it builds with Nix? "
     @if command -v nix >/dev/null; then \
-            if [[ $(nix show-config 2>/dev/null | grep "experimental-features") =~ "flakes" ]]; then \
+            if [[ ! $(nix show-config 2>/dev/null | grep "experimental-features") =~ "flakes" ]]; then \
                 printf "\\033[38;2;209;214;114mflakes feature is not enabled\\033[0m\n"; \
             else \
                 if nix build; \
@@ -42,3 +42,6 @@ test-suite: test
     else \
         printf "\\033[38;2;209;214;114m'nix' cannot be found in PATH\\033[0m\n"; \
     fi
+
+# Test and build the source code, if possible try to compile it with Nix.
+test-suite: test build-test
