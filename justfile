@@ -33,17 +33,18 @@ build-test:
 
     @printf "Does it builds with Nix? "
     @if command -v nix >/dev/null; then \
-            if [[ ! $(nix show-config 2>/dev/null | grep "experimental-features") =~ "flakes" ]]; then \
-                printf "\\033[38;2;209;214;114mflakes feature is not enabled\\033[0m\n"; \
+        if ! nix show-config 2>/dev/null | grep "experimental-features.*flakes" >/dev/null; then \
+            printf "\\033[38;2;209;214;114mflakes feature is not enabled\\033[0m\\n"; \
+        else \
+            if nix build; then \
+                echo "Yeap it builds with Nix {{success_emoji}}"; \
             else \
-                if nix build; \
-                    then echo "Yeap it builds with Nix {{success_emoji}}"; \
-                    else echo "Nix failed to build {{error_emoji}}"; \
-                fi; \
-            fi \
+                echo "Nix failed to build {{error_emoji}}"; \
+            fi; \
+        fi; \
     else \
-        printf "\\033[38;2;209;214;114m'nix' cannot be found in PATH\\033[0m\n"; \
-    fi
+        printf "\\033[38;2;209;214;114'nix' cannot be found in PATH\\033[0m\\n"; \
+    fi;
 
 # Test and build the source code, if possible try to compile it with Nix.
 test-suite: test build-test
