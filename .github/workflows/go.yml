@@ -6,9 +6,11 @@ jobs:
   build-test:
     name: Build test
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Painful
+          fetch-tags: true
       - name: Install Just
         uses: extractions/setup-just@v1
       - name: Install Go
@@ -32,6 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Painful
+          fetch-tags: true
       - name: Install Just
         uses: extractions/setup-just@v1
       - name: Install Go
@@ -49,10 +54,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Gofumpt
         uses: luisnquin/setup-gofumpt@v1.0.0
-
       - name: Check .go files format
         run: |
           [ "$(gofumpt -d ./..)" = "" ]
