@@ -21,7 +21,7 @@ func Ls(currentDir string) error {
 	switcher := NewSwitcher(settings)
 
 	active, err := switcher.GetActiveEnvironment()
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
 
