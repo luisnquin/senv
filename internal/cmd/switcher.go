@@ -31,7 +31,10 @@ func (s Switcher) GetActiveEnvironment() (string, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		if len(rxSenvDotEnvComment.FindAllString(line, -1)) == 2 {
+		// Closures: #_ or _#
+		const expectedNClosures = 2
+
+		if len(rxSenvDotEnvComment.FindAllString(line, -1)) == expectedNClosures {
 			return rxSenvDotEnvComment.ReplaceAllString(line, ""), nil
 		}
 	}

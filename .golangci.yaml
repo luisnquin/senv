@@ -1,0 +1,24 @@
+linters:
+  enable-all: true
+  disable:
+    - paralleltest
+    - tagliatelle
+    - nosnakecase
+    - godox
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - "$all"
+          - "!$test"
+        allow:
+          - $gostd # standard library
+          - github.com
+        deny:
+          - pkg: reflect
+            desc: Please don't use this
+  gomnd:
+    ignored-functions:
+      - make
+      - flaggy.AttachSubcommand

@@ -12,6 +12,8 @@ type option struct {
 	Selected bool
 }
 
+const defaultSelectPromptSize = 10
+
 func ListSelector(label string, options []string, selected string) (string, bool) {
 	opts := make([]option, len(options))
 
@@ -36,7 +38,7 @@ func ListSelector(label string, options []string, selected string) (string, bool
 		Templates:         templates,
 		StartInSearchMode: true,
 		HideHelp:          true,
-		Size:              10,
+		Size:              defaultSelectPromptSize,
 		HideSelected:      true,
 	}
 
