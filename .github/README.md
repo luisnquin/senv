@@ -1,6 +1,9 @@
 
 # Senv
 
+![go-ci](https://github.com/luisnquin/senv/actions/workflows/go.yml/badge.svg)
+<img alt="built-with-nix" src="https://builtwithnix.org/badge.svg" width="80px">
+
 ## Why?
 
 It's annoying to have to manually update each **environment variable** or rename **.env** files in order to change to specific configurations for a project.
