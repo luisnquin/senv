@@ -30,7 +30,7 @@ test:
 build-test:
     @set -e
     @printf "Does it purely build? "
-    @if just build; then echo "{{success_emoji}}"; else echo "{{error_emoji}}"; fi
+    @if just build; then echo "Yeap {{success_emoji}}"; else echo "Nope {{error_emoji}}"; fi
 
     @printf "Does it builds with Nix? "
     @if command -v nix >/dev/null; then \
