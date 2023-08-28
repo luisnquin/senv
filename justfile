@@ -28,6 +28,7 @@ test:
 
 # Build the project with and without Nix.
 build-test:
+    @set -e
     @printf "Does it purely build? "
     @if just build; then echo "{{success_emoji}}"; else echo "{{error_emoji}}"; fi
 
@@ -38,8 +39,10 @@ build-test:
         else \
             if nix build; then \
                 echo "Yeap it builds with Nix {{success_emoji}}"; \
+                exit 0; \
             else \
                 echo "Nix failed to build {{error_emoji}}"; \
+                exit 1; \
             fi; \
         fi; \
     else \
