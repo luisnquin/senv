@@ -15,7 +15,7 @@ in
       path = ./.;
     };
 
-    vendorSha256 = "sha256-B6e1U8eDxXaB+3Skt/DxwWlF/33jJ07F+RT1ABCFiSw=";
+    vendorSha256 = "sha256-y42Ovp2IUztaq/Ryk2VySE+/UnbdYxHxAH9UG8nYGvc=";
     doCheck = true;
 
     buildTarget = "./cmd/senv";
