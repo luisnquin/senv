@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func Out() error {
+func GetEnv() error {
 	settings, err := core.LoadUserPreferences()
 	if err != nil {
 		os.Exit(1)

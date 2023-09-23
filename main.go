@@ -17,13 +17,17 @@ var (
 	commit  string
 )
 
-func main() {
-	var toSwitchArg string
+type flags struct {
+	Get             bool
+	Set             string
+	CompletionShell string
+}
 
-	to := flaggy.NewSubcommand("to")
-	to.Description = "Allows you to switch to other environment without a prompt"
-	flaggy.AttachSubcommand(to, 1)
-	to.AddPositionalValue(&toSwitchArg, "environment", 1, true, "I don't know what this does")
+func main() {
+	var flags flags
+
+	flaggy.String(&flags.Set, "", "set", "Set the current environment skipping the default prompt")
+	flaggy.Bool(&flags.Get, "", "get", "Get the current environment")
 
 	ls := flaggy.NewSubcommand("ls")
 	ls.Description = "List all the environments in the working directory"
@@ -32,10 +36,6 @@ func main() {
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
 	flaggy.AttachSubcommand(init, 1)
-
-	out := flaggy.NewSubcommand("out")
-	out.Description = "Print your current environment to stdout, exits with status code 1 if it can't"
-	flaggy.AttachSubcommand(out, 1)
 
 	var completionShellArg string
 
@@ -48,7 +48,14 @@ func main() {
 	flaggy.SetDescription("Switch your .env file")
 	flaggy.SetVersion(getVersion())
 	flaggy.DefaultParser.SetHelpTemplate(assets.GetHelpTpl())
-	flaggy.Parse()
+
+	code, err := flaggy.Parse()
+	if err != nil {
+		// log.Pretty.Error(err.Error())
+
+		flaggy.ShowHelp(err.Error())
+		os.Exit(code)
+	}
 
 	currentDir, err := os.Getwd()
 	if err != nil {
@@ -60,16 +67,16 @@ func main() {
 		if err := cmd.Completion(completionShellArg); err != nil {
 			log.Pretty.Error(err.Error())
 		}
-	case out.Used:
-		if err := cmd.Out(); err != nil {
-			log.Pretty.Fatal(err.Error())
-		}
 	case ls.Used:
 		if err := cmd.Ls(currentDir); err != nil {
 			log.Pretty.Error(err.Error())
 		}
-	case to.Used:
-		if err := cmd.SwitchTo(currentDir, toSwitchArg); err != nil {
+	case flags.Get:
+		if err := cmd.GetEnv(); err != nil {
+			log.Pretty.Fatal(err.Error())
+		}
+	case flags.Set != "":
+		if err := cmd.SetEnv(currentDir, flags.Set); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	case init.Used:

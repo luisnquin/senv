@@ -7,7 +7,7 @@ import (
 	"github.com/luisnquin/senv/internal/log"
 )
 
-func SwitchTo(currentDir, envToSwitch string) error {
+func SetEnv(currentDir, envToSwitch string) error {
 	if !core.HasConfigFiles(currentDir) {
 		log.Pretty.Error1("Current working folder doesn't have a `senv.yaml`") // or `.env` files")
 	}
