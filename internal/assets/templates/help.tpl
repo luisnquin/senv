@@ -8,4 +8,4 @@
   {{if .ShortName}}-{{.ShortName | italic}} {{else}}   {{end}}{{if .LongName}}--{{.LongName | italic}}{{end}}{{if .Description}}   {{.Spacer}}{{.Description}}{{if .DefaultValue}} (default: {{.DefaultValue}}){{end}}{{end}}{{end}}{{end}}
 {{end}}{{if .AppendMessage}}{{.AppendMessage}}
 {{end}}{{if .Message}}
-{{.Message}}{{end}}
+{{.Message | red}}{{end}}
