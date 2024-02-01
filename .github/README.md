@@ -163,7 +163,7 @@ DATABASE_PORT="5432"
 format = "${custom.environment_name}" # more...
 
 [custom.environment_name]
-command = "senv out"
+command = "senv --get"
 description = "Displays the name of your current senv environment"
 format = "using [($output )]($style)"
 shell = ["bash", "--noprofile", "--norc"]
