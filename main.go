@@ -21,6 +21,9 @@ type flags struct {
 	Get             bool
 	Set             string
 	CompletionShell string
+	Ls              struct {
+		Raw bool
+	}
 }
 
 func main() {
@@ -31,6 +34,7 @@ func main() {
 
 	ls := flaggy.NewSubcommand("ls")
 	ls.Description = "List all the environments in the working directory"
+	ls.Bool(&flags.Ls.Raw, "", "raw", "list environment without especial decorations")
 	flaggy.AttachSubcommand(ls, 1)
 
 	init := flaggy.NewSubcommand("init")
@@ -68,7 +72,7 @@ func main() {
 			log.Pretty.Error(err.Error())
 		}
 	case ls.Used:
-		if err := cmd.Ls(currentDir); err != nil {
+		if err := cmd.Ls(currentDir, flags.Ls.Raw); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	case flags.Get:
