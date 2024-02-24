@@ -32,13 +32,13 @@ func getConfigFiles() []string {
 //	export DB_HOST="localhost"
 //	export DB_USER="root"
 //	export DB_PASSWORD="no_password"
-func GenerateDotEnv(e Environment, useExportPrefix bool) ([]byte, error) {
+func GenerateDotEnv(name string, groupedVariables []map[string]any, useExportPrefix bool) ([]byte, error) {
 	var b bytes.Buffer
 
 	data := map[string]any{
-		"sourceName": e.Name,
-		"variables":  e.Variables,
-		"useExport":  useExportPrefix,
+		"source_name":       name,
+		"grouped_variables": groupedVariables,
+		"use_export":        useExportPrefix,
 	}
 
 	t := template.Must(template.New(".env").Parse(assets.GetDotEnvTpl()))

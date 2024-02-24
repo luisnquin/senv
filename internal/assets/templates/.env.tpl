@@ -1,4 +1,5 @@
-#_{{ .sourceName }}_#
+#_{{ .source_name }}_#
 
-{{ range $key, $value := .variables }}{{if $.useExport}}export {{end}}{{ $key }}="{{ $value }}"
-{{ end }}
+{{ range $index, $variables := .grouped_variables }}{{ range $key, $value := $variables }}{{if $.use_export}}export {{end}}{{ $key }}="{{ $value }}"
+{{end}}
+{{end}}

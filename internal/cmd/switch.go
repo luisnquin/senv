@@ -55,7 +55,9 @@ func switchDotEnvFileFromName(preferences *core.UserPreferences, envToSwitch str
 		return errors.New("environment not found")
 	}
 
-	dotEnvData, err := core.GenerateDotEnv(environment, useExportPrefix)
+	groupedEnvVars := groupAndSortByPrefix(environment.Variables)
+
+	dotEnvData, err := core.GenerateDotEnv(environment.Name, groupedEnvVars, useExportPrefix)
 	if err != nil {
 		return err
 	}
