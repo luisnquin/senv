@@ -4,8 +4,8 @@ on:
       - released
 
 env:
-  committer_name: Lucy Diniz
-  committer_email: lucydiniz.rs@gmail.com
+  committer_name: Antigen
+  committer_email: antigen.bot0@gmail.com
 
 jobs:
   update:
