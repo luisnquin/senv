@@ -30,6 +30,9 @@ $ go install github.com/luisnquin/senv@latest
 
 ### Via Nix flakes
 
+<details>
+<summary>Code snippet</summary>
+
 ```nix
 {
   inputs = {
@@ -70,7 +73,14 @@ $ go install github.com/luisnquin/senv@latest
 
 ```
 
+</details>
+
+
 ## Try it with Nix ❄️
+
+
+<details>
+<summary>Nix commands</summary>
 
 ```bash
 # Creates a senv.yaml file in your current folder
@@ -84,9 +94,9 @@ $ nix run github:luisnquin/senv
 
 # Help
 $ nix run github:luisnquin/senv -- --help
-
-# ...
 ```
+
+</details>
 
 ## Settings file
 
