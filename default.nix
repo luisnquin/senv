@@ -4,8 +4,8 @@
   buildGoModule,
   lib,
 }: let
-  version = "v0.8.0";
-  commit = "7ec50b6552c458fb3392945f4e3fb43bfb914a77";
+  version = "0.8.1";
+  commit = "856437ef35f194199276f38f0601715764cffe83";
 in
   buildGoModule {
     pname = "senv";
@@ -20,7 +20,7 @@ in
     doCheck = true;
 
     buildTarget = ".";
-    ldflags = ["-X main.version=${version} -X main.commit=${commit}"];
+    ldflags = ["-X main.version=v${version} -X main.commit=${commit}"];
 
     nativeBuildInputs = [
       installShellFiles
