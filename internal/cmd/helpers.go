@@ -33,9 +33,8 @@ func getActiveEnvironment(envFilePath string) string {
 
 func groupAndSortByPrefix(entries map[string]any) []map[string]any {
 	rTree := buildRadixTreeFromMap(entries)
-	prefixEntries := groupEntriesByPrefix(entries, rTree)
+	prefixEntries, withoutGroup := groupEntriesByPrefix(entries, rTree)
 
-	withoutGroup := make(map[string]any)
 	result := make([]map[string]any, 0, len(prefixEntries))
 
 	prefixes := getSortedPrefixes(prefixEntries)
@@ -66,7 +65,7 @@ func buildRadixTreeFromMap(entries map[string]any) *radix.Tree {
 
 		fragments := strings.Split(k, "_")
 		if len(fragments) > 1 {
-			fragments = fragments[:len(fragments)-2]
+			fragments = fragments[:len(fragments)-1]
 		}
 
 		for _, s := range fragments {
@@ -80,22 +79,23 @@ func buildRadixTreeFromMap(entries map[string]any) *radix.Tree {
 	return rTree
 }
 
-func groupEntriesByPrefix(entries map[string]any, rTree *radix.Tree) map[string]map[string]any {
+func groupEntriesByPrefix(entries map[string]any, rTree *radix.Tree) (map[string]map[string]any, map[string]any) {
 	prefixEntries := make(map[string]map[string]any)
+	withoutGroup := make(map[string]any)
 
 	for k, v := range entries {
-		fragments := strings.SplitN(k, "_", 1)
-
-		if prefix, _, ok := rTree.LongestPrefix(fragments[0]); ok {
+		if prefix, _, ok := rTree.LongestPrefix(k); ok {
 			if _, ok := prefixEntries[prefix]; !ok {
 				prefixEntries[prefix] = map[string]any{k: v}
 			} else {
 				prefixEntries[prefix][k] = v
 			}
+		} else {
+			withoutGroup[k] = v
 		}
 	}
 
-	return prefixEntries
+	return prefixEntries, withoutGroup
 }
 
 func getSortedPrefixes(prefixEntries map[string]map[string]any) []string {
