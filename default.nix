@@ -1,6 +1,5 @@
 {
   installShellFiles,
-  fetchFromGitHub,
   buildGoModule,
   lib,
 }: let
@@ -16,7 +15,7 @@ in
       path = ./.;
     };
 
-    vendorSha256 = "sha256-GtFvRGUkmh639zRi/V2sSuVhcHzQf1I0g4IXLuht2Lg=";
+    vendorHash = "sha256-GtFvRGUkmh639zRi/V2sSuVhcHzQf1I0g4IXLuht2Lg=";
     doCheck = true;
 
     buildTarget = ".";
