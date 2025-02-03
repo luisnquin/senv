@@ -1,14 +1,14 @@
 name: go
-
 on: [push, pull_request]
 
 jobs:
   build:
     name: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -19,14 +19,17 @@ jobs:
           check-latest: false
       - name: Build
         run: go build -v ./...
+
   formatting:
     name: formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Gofumpt
         uses: luisnquin/setup-gofumpt@v1.0.0
-      - name: Check .go files format
+
+      - name: Check *.go files format
         run: |
           [ "$(gofumpt -d ./..)" = "" ]
