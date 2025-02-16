@@ -3,8 +3,8 @@
   buildGoModule,
   lib,
 }: let
-  version = "0.8.2";
-  commit = "5a1d7df33cdefc91287c720b53c6a416e3f722ea";
+  version = "1.0.0";
+  commit = "2e74600d6a4621a2be5c819d42f07d8e09dd1806";
 in
   buildGoModule {
     pname = "senv";
@@ -15,7 +15,7 @@ in
       path = ./.;
     };
 
-    vendorHash = "sha256-GtFvRGUkmh639zRi/V2sSuVhcHzQf1I0g4IXLuht2Lg=";
+    vendorHash = "sha256-FTxvzV7Gu1OYIV2RAWNX/ciVHZhrpK4aQpnXGuTarTI=";
     doCheck = true;
 
     buildTarget = ".";
