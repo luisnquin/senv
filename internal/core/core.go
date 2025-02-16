@@ -14,7 +14,7 @@ import (
 
 // Possible config files.
 func getConfigFiles() []string {
-	return []string{"senv.yaml", "senv.yml"}
+	return []string{".senv", "senv.yaml", "senv.yml"}
 }
 
 // Returns the content of an .env file generated from the given environment variables configuration.
