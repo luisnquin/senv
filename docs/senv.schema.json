@@ -40,6 +40,13 @@
 							},
 							"required": ["file", "variables"]
 						}
+					},
+					"ignored_cue_files": {
+						"description": "The CUE files that won't be generated in this environment. Even if they are in the global definitions. Ensure that the file name is exactly the same as the one in the CUE definition.",
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
 					}
 				},
 				"required": ["name"],

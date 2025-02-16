@@ -108,6 +108,10 @@ func generateCueFiles(preferences *core.SenvConfig, environment core.Environment
 
 	if preferences.Cue != nil && len(environment.Cue) == 0 {
 		for i, globalDefinition := range preferences.Cue.GlobalDefinitions {
+			if lo.Contains(environment.IgnoredCueFiles, globalDefinition.File) {
+				continue
+			}
+
 			cueVariables, err := parseCueVarTplStrs(globalDefinition.Variables, everyVariable)
 			if err != nil {
 				return fmt.Errorf("error parsing CUE file[%d] variables for environment %q: %w,", i, environment.Name, err)
@@ -123,6 +127,10 @@ func generateCueFiles(preferences *core.SenvConfig, environment core.Environment
 
 	for i, cueDefinition := range environment.Cue {
 		cueVariables := cueDefinition.Variables
+
+		if lo.Contains(environment.IgnoredCueFiles, cueDefinition.File) {
+			continue
+		}
 
 		if preferences.Cue != nil {
 			globalDefinition, found := lo.Find(preferences.Cue.GlobalDefinitions, func(d core.CueDefinition) bool {

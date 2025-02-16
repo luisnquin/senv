@@ -9,7 +9,7 @@ import (
 )
 
 type (
-	// The user preferences.z
+	// The user preferences.
 	SenvConfig struct {
 		// The relative or absolute path to the env file.
 		EnvFile string `yaml:"env_file"`
@@ -52,8 +52,9 @@ type (
 		//
 		// 	FOO=bar
 		// 	BAR=foo
-		Variables map[string]any  `yaml:"variables"`
-		Cue       []CueDefinition `yaml:"cue"`
+		Variables       map[string]any  `yaml:"variables"`
+		Cue             []CueDefinition `yaml:"cue"`
+		IgnoredCueFiles []string        `yaml:"ignored_cue_files"`
 	}
 )
 
