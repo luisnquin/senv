@@ -1,40 +1,91 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-        "envs": {
-            "description": "User defined environments.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "description": "The environment name.",
-                        "type": "string"
-                    },
-                    "variables": {
-                        "description": "The variables of the environment.",
-                        "type": "object",
-                        "additionalProperties": true
-                    }
-                },
-                "required": ["name", "variables"]
-            }
-        },
-        "env_file": {
-            "description": "The absolute or relative path to the final .env file.",
-            "type": "string",
-            "default": "./.env"
-        },
-        "defaults": {
-            "description": "Default values that are available in all the environments.",
-            "type": "object",
-            "additionalProperties": true
-        },
-        "use_export_prefix": {
-            "description": "If true, export will be in each variable declaration of the generated .env file.",
-            "type": "boolean"
-        }
-    },
-    "required": ["envs"]
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"env_file": {
+			"description": "The absolute or relative path to the final .env file.",
+			"type": "string",
+			"default": "./.env"
+		},
+		"envs": {
+			"description": "User defined environments.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"description": "The environment name.",
+						"type": "string"
+					},
+					"variables": {
+						"description": "The variables of the environment.",
+						"type": "object",
+						"additionalProperties": true
+					},
+					"cue": {
+						"description": "The CUE definitions of the environment.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"file": {
+									"description": "The path to the CUE file.",
+									"type": "string"
+								},
+								"variables": {
+									"description": "The variables of the CUE file.",
+									"type": "object",
+									"additionalProperties": true
+								}
+							},
+							"required": ["file", "variables"]
+						}
+					}
+				},
+				"required": ["name"],
+				"anyOf": [
+					{
+						"required": ["variables"]
+					},
+					{
+						"required": ["cue"]
+					}
+				]
+			}
+		},
+		"global_variables": {
+			"description": "Default values that are available in all the environments.",
+			"type": "object",
+			"additionalProperties": true
+		},
+		"use_export_prefix": {
+			"description": "If true, export will be in each variable declaration of the generated .env file.",
+			"type": "boolean"
+		},
+		"cue": {
+			"type": "object",
+			"properties": {
+				"global_definitions": {
+					"description": "Defines the common CUE lang definitions for all the environments.",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"file": {
+								"description": "The path to the CUE file.",
+								"type": "string"
+							},
+							"variables": {
+								"description": "The variables of the CUE file.",
+								"type": "object",
+								"additionalProperties": true
+							}
+						},
+						"required": ["file", "variables"]
+					}
+				}
+			}
+		}
+	},
+	"required": ["envs"]
 }

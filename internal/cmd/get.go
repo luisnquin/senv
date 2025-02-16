@@ -24,7 +24,7 @@ func GetEnv() error {
 		os.Exit(1)
 	}
 
-	activeBetweenEnvsFn := func(env core.Environment) bool { return env.Name == activeEnv }
+	activeBetweenEnvsFn := func(env core.EnvironmentDefinition) bool { return env.Name == activeEnv }
 
 	if !lo.SomeBy(settings.Environments, activeBetweenEnvsFn) {
 		os.Exit(1)
