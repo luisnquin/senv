@@ -75,9 +75,7 @@ $ go install github.com/luisnquin/senv@latest
 
 </details>
 
-
 ## Try it with Nix ❄️
-
 
 <details>
 <summary>Nix commands</summary>
@@ -108,7 +106,8 @@ Suppose we have a **senv.yaml** file like this:
 
 ```yaml
 # senv.yaml
-envFile: ./app/.env # optional absolute/relative path
+# absolute/relative(preferably relative) path to target .env file
+env_file: ./app/.env
 envs:
 - name: dev
   variables:
@@ -132,7 +131,7 @@ envs:
 defaults:
   DATABASE_USER: admin # both variables will be added to the
   DATABASE_PORT: 5432 # selected environment if not declared
-useExportPrefix: false # optional
+use_export_prefix: false # optional
 ```
 
 When the .env file is generated from **preprod** it will look like this:

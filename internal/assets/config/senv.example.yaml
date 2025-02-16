@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/luisnquin/senv/main/docs/senv.schema.json
 
-envFile: ./.env
+env_file: ./.env
 envs:
   - name: dev
     variables:
