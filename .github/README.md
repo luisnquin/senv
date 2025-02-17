@@ -128,7 +128,7 @@ envs:
   variables:
     DATABASE_PASSWORD: root123
     DATABASE_HOST: localhost
-defaults:
+global_variables:
   DATABASE_USER: admin # both variables will be added to the
   DATABASE_PORT: 5432 # selected environment if not declared
 use_export_prefix: false # optional
