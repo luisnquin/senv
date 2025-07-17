@@ -60,6 +60,13 @@ func switchDotEnvFileFromName(preferences *core.SenvConfig, envToSwitch string, 
 		return errors.New("environment not found")
 	}
 
+	if environment.Extends != "" {
+		err := handleExtends(preferences, &environment)
+		if err != nil {
+			return err
+		}
+	}
+
 	groupedEnvVars := groupAndSortByPrefix(environment.Variables)
 
 	dotEnvData, err := core.GenerateDotEnv(environment.Name, groupedEnvVars, useExportPrefix)
@@ -81,6 +88,45 @@ func switchDotEnvFileFromName(preferences *core.SenvConfig, envToSwitch string, 
 	}
 
 	return nil
+}
+
+func handleExtends(preferences *core.SenvConfig, environment *core.EnvironmentDefinition) error {
+	for _, other := range preferences.Environments {
+		if other.Name == environment.Extends {
+			copyVars := lo.Assign(map[string]any{}, other.Variables)
+			copyIgnoredCue := append([]string{}, other.IgnoredCueFiles...)
+			copyCue := append([]core.CueDefinition{}, other.Cue...)
+
+			for key, value := range environment.Variables {
+				copyVars[key] = value
+			}
+			environment.Variables = copyVars
+			environment.IgnoredCueFiles = append(copyIgnoredCue, environment.IgnoredCueFiles...)
+
+			for _, originalDefinition := range environment.Cue {
+				merged := false
+				for index, extendedDefinition := range copyCue {
+					if originalDefinition.File == extendedDefinition.File {
+						mergedVars := lo.Assign(extendedDefinition.Variables, originalDefinition.Variables)
+						copyCue[index] = core.CueDefinition{
+							File:      originalDefinition.File,
+							Variables: mergedVars,
+						}
+						merged = true
+						break
+					}
+				}
+				if !merged {
+					copyCue = append(copyCue, originalDefinition)
+				}
+			}
+			environment.Cue = copyCue
+
+			return nil
+		}
+	}
+
+	return fmt.Errorf("environment '%s' could not be found (required by '%s')", environment.Extends, environment.Name)
 }
 
 func generateCueFiles(preferences *core.SenvConfig, environment core.EnvironmentDefinition) error {

@@ -52,7 +52,9 @@ type (
 		//
 		// 	FOO=bar
 		// 	BAR=foo
-		Variables       map[string]any  `yaml:"variables"`
+		Variables map[string]any `yaml:"variables"`
+		// The environment definitions that it extends.
+		Extends         string          `yaml:"extends"`
 		Cue             []CueDefinition `yaml:"cue"`
 		IgnoredCueFiles []string        `yaml:"ignored_cue_files"`
 	}
@@ -118,6 +120,10 @@ func (c *SenvConfig) validate() error {
 	for _, e := range c.Environments {
 		if _, ok := namesRegister[e.Name]; ok {
 			return fmt.Errorf("environment name %q already registered", e.Name)
+		}
+
+		if e.Variables == nil {
+			e.Variables = make(map[string]any)
 		}
 
 		for k, v := range c.GlobalVariables {

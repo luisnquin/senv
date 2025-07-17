@@ -22,6 +22,10 @@
 						"type": "object",
 						"additionalProperties": true
 					},
+					"extends": {
+						"description": "The environment to extend.",
+						"type": "string"
+					},
 					"cue": {
 						"description": "The CUE definitions of the environment.",
 						"type": "array",
@@ -53,6 +57,9 @@
 				"anyOf": [
 					{
 						"required": ["variables"]
+					},
+					{
+						"required": ["extends"]
 					},
 					{
 						"required": ["cue"]
