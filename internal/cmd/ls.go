@@ -11,7 +11,7 @@ import (
 	"github.com/samber/lo"
 )
 
-var rxSenvDotEnvComment = regexp.MustCompile("[\\#\\_]+")
+var rxSenvDotEnvComment = regexp.MustCompile(`[\#\_]+`)
 
 func Ls(currentDir string, raw bool) error {
 	settings, err := core.LoadUserPreferences()
