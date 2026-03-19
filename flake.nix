@@ -1,33 +1,44 @@
 {
   description = "Switch your .env file from the command line";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
   outputs = {
     self,
     nixpkgs,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (
+  }: let
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+
+    forAllSystems = f:
+      builtins.listToAttrs (map (system: {
+          name = system;
+          value = f system;
+        })
+        systems);
+  in {
+    packages = forAllSystems (
       system: let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
-
-        defaultPackage = pkgs.callPackage ./default.nix {};
+        pkgs = import nixpkgs {inherit system;};
       in {
-        inherit defaultPackage;
+        default = pkgs.callPackage ./default.nix {};
+      }
+    );
 
-        defaultApp = flake-utils.lib.mkApp {
-          drv = defaultPackage;
-        };
-
-        devShell = pkgs.mkShell {
-          buildInputs = [defaultPackage];
+    devShells = forAllSystems (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
+      in {
+        default = pkgs.mkShell {
+          buildInputs = [
+            self.packages.${system}.default
+          ];
         };
       }
     );
+  };
 }
