@@ -29,6 +29,10 @@
       }
     );
 
+    overlays.default = final: prev: {
+      senv = self.packages.${final.system}.default;
+    };
+
     devShells = forAllSystems (
       system: let
         pkgs = import nixpkgs {inherit system;};
