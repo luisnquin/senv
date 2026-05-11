@@ -24,6 +24,12 @@ type flags struct {
 	Ls              struct {
 		Raw bool
 	}
+	Export struct {
+		Format string
+		Dir    string
+		Pretty bool
+		Env    string
+	}
 }
 
 func main() {
@@ -40,6 +46,14 @@ func main() {
 	init := flaggy.NewSubcommand("init")
 	init.Description = "Creates a new configuration file in the current directory"
 	flaggy.AttachSubcommand(init, 1)
+
+	export := flaggy.NewSubcommand("export")
+	export.Description = "Print resolved variables for an environment (dotenv or json) to stdout"
+	export.String(&flags.Export.Format, "f", "format", "Output format: dotenv or json")
+	export.String(&flags.Export.Dir, "d", "dir", "Directory to resolve senv.yaml from (default: cwd)")
+	export.Bool(&flags.Export.Pretty, "", "pretty", "Pretty-print JSON (json format only)")
+	export.AddPositionalValue(&flags.Export.Env, "environment", 1, true, "Environment name from senv.yaml")
+	flaggy.AttachSubcommand(export, 1)
 
 	var completionShellArg string
 
@@ -85,6 +99,10 @@ func main() {
 		}
 	case init.Used:
 		if err := cmd.Init(); err != nil {
+			log.Pretty.Error(err.Error())
+		}
+	case export.Used:
+		if err := cmd.Export(currentDir, flags.Export.Dir, flags.Export.Env, flags.Export.Format, flags.Export.Pretty); err != nil {
 			log.Pretty.Error(err.Error())
 		}
 	default:

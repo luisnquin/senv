@@ -68,7 +68,16 @@ func LoadUserPreferences() (*SenvConfig, error) {
 		return nil, err
 	}
 
-	workDirPath := getDirWithConfig(currentPath)
+	return LoadUserPreferencesFromDir(currentPath)
+}
+
+// Same as [LoadUserPreferences] but resolves the config directory starting
+// from fromDir instead of the process working directory.
+func LoadUserPreferencesFromDir(fromDir string) (*SenvConfig, error) {
+	workDirPath := getDirWithConfig(fromDir)
+	if workDirPath == "" {
+		return nil, getErrConfigNotFound()
+	}
 
 	c := &SenvConfig{
 		WorkDirectory: workDirPath,
