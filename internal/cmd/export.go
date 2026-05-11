@@ -46,7 +46,7 @@ func Export(workDir, configDir, envName, format string, prettyJSON bool) error {
 	switch f {
 	case exportFormatDotenv:
 		grouped := groupAndSortByPrefix(environment.Variables)
-		out, err := core.GenerateDotEnv(environment.Name, grouped, settings.UseExportPrefix)
+		out, err := core.GenerateDotEnv(environment.Name, grouped, settings.UseExportPrefix, false)
 		if err != nil {
 			return err
 		}

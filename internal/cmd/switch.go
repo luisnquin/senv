@@ -59,7 +59,7 @@ func switchDotEnvFileFromName(preferences *core.SenvConfig, envToSwitch string, 
 
 	groupedEnvVars := groupAndSortByPrefix(environment.Variables)
 
-	dotEnvData, err := core.GenerateDotEnv(environment.Name, groupedEnvVars, useExportPrefix)
+	dotEnvData, err := core.GenerateDotEnv(environment.Name, groupedEnvVars, useExportPrefix, true)
 	if err != nil {
 		return err
 	}

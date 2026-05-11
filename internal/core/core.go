@@ -18,6 +18,7 @@ func getConfigFiles() []string {
 }
 
 // Returns the content of an .env file generated from the given environment variables configuration.
+// When writeSourceMarker is true, a first line #_<name>_# is included so senv can detect the active environment.
 //
 // Example:
 //
@@ -32,13 +33,17 @@ func getConfigFiles() []string {
 //	export DB_HOST="localhost"
 //	export DB_USER="root"
 //	export DB_PASSWORD="no_password"
-func GenerateDotEnv(name string, groupedVariables []map[string]any, useExportPrefix bool) ([]byte, error) {
+//
+// writeSourceMarker controls the leading #_<name>_# line used by senv to know
+// which environment is active in the env file. Use false for stdout / export.
+func GenerateDotEnv(name string, groupedVariables []map[string]any, useExportPrefix bool, writeSourceMarker bool) ([]byte, error) {
 	var b bytes.Buffer
 
 	data := map[string]any{
-		"source_name":       name,
-		"grouped_variables": groupedVariables,
-		"use_export":        useExportPrefix,
+		"source_name":         name,
+		"grouped_variables":   groupedVariables,
+		"use_export":          useExportPrefix,
+		"write_source_marker": writeSourceMarker,
 	}
 
 	t := template.Must(template.New(".env").Parse(assets.GetDotEnvTpl()))
