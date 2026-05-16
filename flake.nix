@@ -30,7 +30,7 @@
     );
 
     overlays.default = final: prev: {
-      senv = self.packages.${final.system}.default;
+      senv = self.packages.${final.stdenv.hostPlatform.system}.default;
     };
 
     devShells = forAllSystems (
